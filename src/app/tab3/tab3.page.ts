@@ -14,7 +14,7 @@ export class Tab3Page implements OnInit {
   isOpen = false;
   allPosts: any;
   profile: any;
-  friendsCount = this.apiService.profile.friends.length -1
+  friendsCount = this.apiService.profile.friends.length -1 | 0
 
   reactions: string[] = [
     '../../../assets/images/in-love.png',

@@ -3,6 +3,8 @@ import { PhotoViewer } from '@awesome-cordova-plugins/photo-viewer/ngx';
 import { DataHelperService } from '../shared/data-helper.service';
 import { iPost } from '../shared/models';
 import { ApiService } from '../services/api.service';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -23,17 +25,32 @@ export class Tab1Page {
   constructor(
     private dataHelper: DataHelperService,
     public photo: PhotoViewer,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router,
+     private route: ActivatedRoute
   ) {
     //this.allPosts = this.apiService.getPosts()
     this.profile = this.apiService.profile
     this.updateFeeds()
+    apiService.getUserProfile()
   }
 
-  ngOnInit() {
+  async ngOnInit() {
 
     this.connectTorealtime()
-
+    
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      // Check if the navigation is to the desired tab (e.g., '/tab1')
+      console.log("router:",event.urlAfterRedirects)
+      if (event.urlAfterRedirects === '/tabs/tab1') {
+         this.apiService.getUserProfile()
+        // Call your function here
+        this.updateFeeds()
+        this.connectTorealtime();
+      }
+    });
 
 
    }
@@ -128,5 +145,6 @@ export class Tab1Page {
   })
 
   }
+  
 
 }

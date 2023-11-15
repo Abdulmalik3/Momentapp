@@ -47,6 +47,7 @@ async acceptFriend(id,senderId,recieverdId){
     let x = this.friendshipRequest.splice(index,0)
     this.friendshipRequest = x
     this.activeTab = "FriendsRequest"
+    this.apiService.getUserProfile()
     this.ngOnInit()
 
     // You can also trigger any UI updates or other logic here

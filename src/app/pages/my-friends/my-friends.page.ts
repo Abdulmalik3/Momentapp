@@ -21,8 +21,18 @@ export class MyFriendsPage implements OnInit {
 
   async ngOnInit() {
      this.friendList = await this.apiService.getFriends(this.apiService.profile.friends)
-     this.friendList.splice(0,1)
+    console.log(this.friendList,this.apiService.profile.id)
+     const index = this.friendList.findIndex(friend => friend.id === this.apiService.profile.id);
+        
+      
+     if (index !== -1) {
+      this.friendList.splice(index,1)
+  }else{
+    console.log("something went worn at my-friend.page.ts")
+
   }
+
+}
 
   async moveToMyfriendsProfile(friendData){
     //set localStorag 
