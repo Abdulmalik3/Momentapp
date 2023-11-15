@@ -11,15 +11,14 @@ export class Tab2Page {
   friendList
   activeTab = "friendList"
   friendshipRequest
+  searchinput
 
   constructor(private apiService: ApiService) {
 
    }
 
    async ngOnInit() {
-    let data = await this.apiService.bringMemebers()
-    console.log("ever member data: ", data)
-    this.friendList = data
+
 
     this.friendshipRequest = await this.apiService.bringFriendshipRequests()
 }
@@ -52,6 +51,17 @@ async acceptFriend(id,senderId,recieverdId){
 
     // You can also trigger any UI updates or other logic here
   }
-  
 }
+  async searchOnChange(event){
+    if(this.searchinput.length < 3) return false
+
+    let data = await this.apiService.searchForFriends(this.searchinput)
+    if(data.length >= 1 ){
+      this.friendList = data
+    }else{
+      this.friendList = []
+    }
+  }
+  
+
 }

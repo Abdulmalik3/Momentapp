@@ -24,9 +24,9 @@ export class MyFriendsPage implements OnInit {
      this.friendList.splice(0,1)
   }
 
-  async moveToMyfriendsProfile(friendId){
+  async moveToMyfriendsProfile(friendData){
     //set localStorag 
-    await localStorage.setItem('myFrindId', friendId)
+    await localStorage.setItem('myFriend', JSON.stringify(friendData))
 
     this.navCtrl.navigateForward('/friend-profile')
   }

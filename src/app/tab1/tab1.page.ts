@@ -28,14 +28,22 @@ export class Tab1Page {
     //this.allPosts = this.apiService.getPosts()
     this.profile = this.apiService.profile
     this.updateFeeds()
-    this.connectTorealtime()
-    
   }
 
   ngOnInit() {
-    
+
+    this.connectTorealtime()
+
+
 
    }
+   
+   handleRefresh(event) {
+    setTimeout(() => {
+      this.ngOnInit()
+      event.target.complete();
+    }, 2000);
+  }
 
   presentPopover(e: Event) {
     this.popover.event = e;

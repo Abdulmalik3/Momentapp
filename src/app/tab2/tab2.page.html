@@ -10,7 +10,7 @@
 
   <ion-item lines="none" class="searchBar ion-margin-bottom">
     <ion-icon name="search-outline" color="danger" slot="start"></ion-icon>
-    <ion-input type="text" placeholder="Search friends"></ion-input>
+    <ion-input type="text" [(ngModel)]="searchinput" (ngModelChange)="searchOnChange($event)" placeholder="Search friends"></ion-input>
   </ion-item>
 
 

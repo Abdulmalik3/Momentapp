@@ -12,8 +12,8 @@ export class FriendProfilePage implements OnInit {
 
   @ViewChild('popover') popover: any;
   allPosts
-  friendProfile
-
+  friendProfile = JSON.parse(localStorage.getItem('myFriend'))
+  postCount
   isOpen = false;
 
   presentPopover(e: Event) {
@@ -64,10 +64,12 @@ export class FriendProfilePage implements OnInit {
   }
 
   async ngOnInit() {
-    let userId = await localStorage.getItem('myFrindId')
-    this.friendProfile = await this.ApiService.getUserProfileById(userId)
-    this.allPosts = await this.ApiService.getPost(userId)
+
     
+
+    this.allPosts = await this.ApiService.getPost(this.friendProfile.id)
+    this.postCount = this.allPosts.length
+    console.log("count",this.allPosts.length)
     console.log(this.friendProfile)
 
   }

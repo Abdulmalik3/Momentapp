@@ -13,10 +13,18 @@
 
 <ion-content class="ion-padding">
 
-  <ion-item class="ion-margin-bottom searchBar" lines="none">
-    <ion-icon name="search-outline" color="danger" slot="start"></ion-icon>
-    <ion-input type="text" placeholder="Search here...."></ion-input>
-  </ion-item>
+  <ion-refresher class="ion-padding"  slot="fixed" style="background-color: #F1F1F1; height: 300px;" [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content ></ion-refresher-content>
+  </ion-refresher>
+ 
+
+
+
+
+
+
+
+
 
   <app-social-post [posts]="allPosts"></app-social-post>
 

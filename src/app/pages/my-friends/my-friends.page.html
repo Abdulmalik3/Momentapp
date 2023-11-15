@@ -18,12 +18,12 @@
     <ion-avatar routerLink="/friend-profile" slot="start">
       <img src={{friend.avatar_url}}>
     </ion-avatar>
-    <ion-label (click)="moveToMyfriendsProfile(friend.id)" >
+    <ion-label (click)="moveToMyfriendsProfile(friend)" >
       <h3 class="bold">{{friend.full_name}}</h3>
       <p>{{friend.bio}}</p>
     </ion-label>
     <ion-buttons slot="end">
-      <ion-button (click)="moveToMyfriendsProfile(friend.id)" color="danger" shape="round">
+      <ion-button (click)="moveToMyfriendsProfile(friend)" color="danger" shape="round">
         <ion-icon color="danger" name="chatbox"></ion-icon>
       </ion-button>
     </ion-buttons>

@@ -14,7 +14,7 @@ export class ApiService {
   public currentUser: BehaviorSubject<User | boolean> = new BehaviorSubject(
     null
     )
-  profile 
+  profile = JSON.parse(localStorage.getItem('profile'))
   profileobject = JSON.parse(localStorage.getItem('profile'));
   friendship
   members
@@ -39,7 +39,6 @@ export class ApiService {
         
         this.loadUser()
         this.getUserProfile()
-        this.profile = JSON.parse(localStorage.getItem('profile'))
 
 
         this.friendship = this.bringFriendshipRequests().then(data=> {return data})
@@ -200,6 +199,8 @@ async loadUser() {
    
     console.log("profile432:", data)
     await localStorage.setItem('profile',JSON.stringify( data.data))
+    this.profile = JSON.parse(localStorage.getItem('profile'))
+
 
 
   }
@@ -301,7 +302,7 @@ async loadUser() {
   //save post
 
   async savePost(post) {
-    this.loadCtr.create({
+    await this.loadCtr.create({
       message: 'Saving post...'
     }).then(loading => loading.present())
 
@@ -455,6 +456,12 @@ let { data: profiles, error } = await this.supabase
   return profiles
 }
 
+async searchForFriends(name){
+  const { data, error } = await this.supabase.from('profiles').select("*").textSearch('full_name', `${name}`)
+  console.log("found results:", data, error)
+  return data
+}
+
 async bringFriendshipRequests(){
   const user = this.profile
   let { data: requests, error } = await this.supabase
@@ -469,7 +476,7 @@ async bringFriendshipRequests(){
   }
 
   async getFriends(friends){
-    return (await this.supabase.from('profiles').select('id,full_name,avatar_url').in('id',friends)).data
+    return (await this.supabase.from('profiles').select('id,full_name,avatar_url,friends').in('id',friends)).data
   }
 
 
