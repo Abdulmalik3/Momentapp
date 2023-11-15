@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>New Chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item lines="none" class="searchBar">
+    <ion-text class="bold">To: </ion-text>
+    <ion-input class="ms-1" type="text" placeholder="Search....."></ion-input>
+  </ion-item>
+
+  <h4 class="bold"><ion-text color="dark">Available Friends</ion-text></h4>
+
+  <ion-item *ngFor="let chat of availableFriend" routerLink="/chat-screen" class="ion-no-padding person" lines="none">
+    <ion-avatar slot="start">
+      <img src={{chat.userProfile}}>
+    </ion-avatar>
+    <ion-label>
+      <h3>{{chat.name}}</h3>
+      <p>{{chat.username}}</p>
+    </ion-label>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+  </ion-item>
+
+</ion-content>

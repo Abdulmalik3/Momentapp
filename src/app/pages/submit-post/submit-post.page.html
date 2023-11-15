@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Submit Post</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item lines="none">
+    <ion-avatar slot="start">
+      <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600">
+    </ion-avatar>
+    <ion-label>
+      <h3 class="bold">David Warner</h3>
+      <p>david@gmail.com</p>
+    </ion-label>
+  </ion-item>
+  <ion-item lines="none" class="textArea ion-margin-top">
+    <ion-textarea rows="3" type="text" placeholder="What's in your mind , David"></ion-textarea>
+  </ion-item>
+
+  <img class="post ion-margin-top" src="https://cdn.pixabay.com/photo/2018/09/09/13/32/fantasy-3664586__480.jpg">
+  <ion-button routerLink="/tabs/tab1" color="danger" routerDirection="root" expand="block" class="ion-margin-top">
+    Post
+  </ion-button>
+
+</ion-content>

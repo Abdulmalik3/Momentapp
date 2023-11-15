@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-title>
+      Add Friends
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item lines="none" class="searchBar ion-margin-bottom">
+    <ion-icon name="search-outline" color="danger" slot="start"></ion-icon>
+    <ion-input type="text" placeholder="Search friends"></ion-input>
+  </ion-item>
+
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-segment color="danger" [(ngModel)]="activeTab">
+        <ion-segment-button value="friendList">
+          <ion-label class="bold">My Friends</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="FriendsRequest">
+          <ion-label class="bold">Friendship request</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+  </ion-header>
+  
+
+
+  <div *ngIf="activeTab==='FriendsRequest'">
+  <ion-item *ngFor="let friendReq of friendshipRequest" lines="none" class="ion-margin-bottom">
+    <ion-avatar routerLink="/friend-profile" slot="start">
+      <img src="{{ friendReq['profiles']['avatar_url'] }}"  alt="">
+    </ion-avatar>
+    <ion-label routerLink="/friend-profile">
+      <h3 class="bold">{{friendReq['profiles']['full_name']}}</h3>
+      <p>{{friendReq['profiles']['bio']}}</p>
+    </ion-label>
+    <ion-button color="danger" (click)="acceptFriend(friendReq['id'], friendReq['senderId'], friendReq['RecieverId'])"  shape="round" slot="end">Add</ion-button>
+  </ion-item>
+  </div>
+
+
+
+  <div *ngIf="activeTab==='friendList'">
+    <div *ngIf="activeTab==='friendList'">
+      <ion-item *ngFor="let friend of friendList" lines="none" class="ion-margin-bottom">
+        <ion-avatar routerLink="/friend-profile" slot="start">
+          <img src="{{ friend['avatar_url'] }}"  alt="">
+        </ion-avatar>
+        <ion-label routerLink="/friend-profile">
+          <h3 class="bold">{{friend['full_name']}}</h3>
+          <p>{{friend['bio']}}</p>
+        </ion-label>
+        <ion-button color="danger" (click)="addFriend(friend['id'])"  shape="round" slot="end">Add</ion-button>
+      </ion-item>
+      </div>
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,503 @@
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { SupabaseClient, createClient, User } from '@supabase/supabase-js';
+import { BehaviorSubject, Observable, findIndex } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  supabase: SupabaseClient
+  public currentUser: BehaviorSubject<User | boolean> = new BehaviorSubject(
+    null
+    )
+  profile 
+  profileobject = JSON.parse(localStorage.getItem('profile'));
+  friendship
+  members
+  constructor(private router: Router,
+    private loadCtr: LoadingController,
+     private alertCtrl: AlertController,
+     private loadingCtrl: LoadingController) { 
+    this.supabase = createClient(
+      environment.supabase.url,
+      environment.supabase.key
+      )
+    
+      this.supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+          this.currentUser.next(session.user)
+          console.log("Event:" ,event)
+          console.log("SET USER:" ,session)
+        }else{
+
+          this.currentUser.next(false)
+        }})
+        
+        this.loadUser()
+        this.getUserProfile()
+        this.profile = JSON.parse(localStorage.getItem('profile'))
+
+
+        this.friendship = this.bringFriendshipRequests().then(data=> {return data})
+        console.log("Supabase constructor | friendship", this.friendship)
+        this.members = this.bringMemebers().then(data=> {return data})
+        console.log("Supabase constructor | members", this.members)
+
+}
+
+async loadUser() {
+  if(this.currentUser.value){
+    return;
+  }
+
+    const data = await this.supabase.auth.getUser();
+    if(data.data.user){
+      this.currentUser.next(data.data.user)
+      console.log("User:" ,data.data.user.id)
+  }else{
+    this.currentUser.next(false)
+    console.log("User not set 2")
+
+  }
+  const user = await this.supabase.auth.getUser();
+  if(user.data.user){
+    this.currentUser.next(user.data.user)
+}else{
+  this.currentUser.next(false)
+}
+}
+
+  async signUp(email: string, password: string, name: string) {
+    const loading = await this.alertCtrl.create({
+      message: 'Singing up...'
+    })  
+    await loading.present()
+    var  { error, data } = await this.supabase.auth.signUp({
+      email,
+      password,
+    })
+   const new_id = (await this.supabase.auth.getUser()).data.user.id
+    console.log("userId", new_id)
+    await new Promise(f => setTimeout(f, 1500));
+    await loading.dismiss()
+    if (error) {
+      this.showAlert('Sign up failed', error.message)
+      console.log(error)
+      return error
+    }
+    var data2 = await this.supabase.from('profiles')
+    .update([
+      { full_name: name ,
+       avatar_url: 'https://gcavocats.ca/wp-content/uploads/2018/09/man-avatar-icon-flat-vector-19152370-1.jpg' ,
+       friends: [new_id] },
+    ])
+    .eq("id", new_id )
+    .select()
+    console.log("sing up data:", data2)
+
+    
+
+  }
+
+  async signIn(email: string, password: string) {
+    const loading = await this.alertCtrl.create({
+      message: 'Logging in...'
+    })  
+    await loading.present()
+    const { error, data } = await this.supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    await loading.dismiss()
+    if (error) {
+      this.showAlert('Login Failed', error.message)
+      console.log(error)
+      return error
+    }
+    this.router.navigateByUrl('/') 
+    return data.user
+  }
+
+  async signOut() {
+    const { error } = await this.supabase.auth.signOut()
+    if (error) {
+      console.log(error)
+      return error
+    }
+    this.router.navigateByUrl('/', {replaceUrl: true})
+  }
+  //reset user's password
+  async resetPassword(email: string) {
+    const { error } = await this.supabase.auth.resetPasswordForEmail(email)
+    if (error) {
+      console.log(error)
+      return error
+    }
+  }
+  //update user's password
+  async updatePassword(newPassword: string) {
+    const user = await this.supabase.auth.getUser()
+    const { error } = await this.supabase.auth.updateUser ( {password: newPassword})
+    if (error) {
+      console.log(error)
+      return error
+    }}
+
+
+    async updateProfile(data ){
+      console.log("Update Profile", data)
+       
+      const { error } = await this.supabase
+                .from('profiles')
+                .update(data)
+                .eq('id', this.profile.id)
+
+      if (error) {
+        this.showAlert('Update Failed', error.message)
+
+    }
+  }
+ 
+  
+
+  getCurrentUser(): Observable <User | boolean>{
+    return this.currentUser.asObservable()
+
+  }
+
+  getCurrentUserId(): string {
+    if(this.currentUser.value){
+      return (this.currentUser.value as User).id;
+    }else{
+      return null
+    }
+  }
+
+
+
+
+
+
+
+  async getUser() {
+    const user = await this.supabase.auth.getUser()
+    return user.data.user
+  }
+
+  async getUserProfile() {
+
+    const id = (await this.supabase.auth.getUser()).data.user.id
+    var data = await this.supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', id)
+      .single()
+      
+   
+    console.log("profile432:", data)
+    await localStorage.setItem('profile',JSON.stringify( data.data))
+
+
+  }
+  async getUserProfileById(id) {
+
+ 
+    var data = await this.supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', id)
+  
+   
+    console.log("friends profile:", data.data.toString())
+    return data.data
+
+
+  }
+
+  //posts :
+
+  async getPosts() {
+    const { data, error } = await this.supabase.from('posts').select('*')
+    if (error) {
+      console.log(error)
+      return error
+    }
+    console.log("posts: ",data)
+    return data
+  }
+
+  async getPost(id: string) {
+    var data 
+
+    await this.supabase
+      .from('posts')
+      .select('*, profiles(id,full_name, avatar_url)')
+      .eq('authorId', id)
+      .order('created_at', { ascending: true })
+      .then((result) => { data = result.data})
+      console.log(data)
+
+    return data
+  }
+
+ 
+
+  //get user's posts and friends posts and listen for changes
+
+  async getFeed() {
+    let friends
+    if(this.profile){
+      friends = this.profile.friends
+    }else{
+  
+    // Bring friend's ids from the friends column in the profiles table
+    const { data: profile, error: profilesError } = await this.supabase
+      .from('profiles')
+      .select('friends')
+      .eq('id', this.profile.id)
+      .single();
+      friends = profile.friends
+    if (profilesError) {
+      console.log(profilesError);
+      return profilesError;
+    }}
+    
+  
+    // Initialize data as an array
+    let data: any[] = [];
+  
+    const { data: initialData, error } = await this.supabase
+      .from('posts')
+      .select('*, profiles(id,full_name, avatar_url)')
+      .in('authorId', friends)
+      .order('created_at', { ascending: false })
+
+  
+    if (error) {
+      console.log(error);
+    }
+  
+    // Check if the data is an array or a single object, and convert to an array if needed
+    if (initialData instanceof Array) {
+      data = initialData;
+    } else if (initialData) {
+      data.push(initialData);
+    }
+
+ 
+    
+
+
+    console.log(data);
+  
+    return data;
+  }
+  
+
+  //save post
+
+  async savePost(post) {
+    this.loadCtr.create({
+      message: 'Saving post...'
+    }).then(loading => loading.present())
+
+    const { data, error } = await this.supabase.
+                            from('posts')
+                            .insert(post)
+    this.loadCtr.dismiss()
+
+    if (error) {
+      console.log(error)
+      this.showAlert("Post not saved", error.message)
+      return error
+    }
+    console.log("Post created successfully:", data)
+    return data
+  
+
+  }
+
+  async reactToPost(postId, reaction){
+    const user = this.profile;
+    try{
+      let { data: currentReactions, error } = await this.supabase
+      .from('posts')
+      .select('reactions')
+      .eq("id", postId )
+      .single();
+      console.log("current reactions",currentReactions)
+      let newData =  [this.profile.id, reaction]
+      if(currentReactions['reactions'] != null){
+      let index = currentReactions['reactions'].findIndex((innerArray)=> innerArray[0].includes(newData[0]))
+      if(index === -1){
+      currentReactions['reactions'].unshift(newData)
+      console.log("new current reactions",currentReactions)
+        }else{
+        currentReactions['reactions'].splice(index,1)
+        currentReactions['reactions'].unshift(newData)
+      }}
+
+      let { data, error: r } = await this.supabase.from('posts').update({reactions: currentReactions['reactions']}).eq('id', postId).select()
+      console.log(r,error)
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+  async saveComment(comment) {
+    this.loadCtr.create({
+      message: 'Saving post...'
+    }).then(loading => loading.present())
+
+    const { data, error } = await this.supabase.
+                            from('comments')
+                            .insert(comment)
+    this.loadCtr.dismiss()
+
+    if (error) {
+      console.log(error)
+      this.showAlert("Comment not saved", error.message)
+      return error
+    }
+    console.log("Comment created successfully:", data)
+    return data
+  
+
+  }
+
+  async getComments(postId){
+    const { data: initialData, error } = await this.supabase
+    .from('comments')
+    .select('*, profiles(id,full_name, avatar_url)')
+    .eq('postId', postId)
+    .order('created_at', { ascending: false })
+
+    if(error){
+      console.log("comments error:", error.message)
+      return false
+    }
+
+    return initialData
+  }
+
+
+  //--- Friends
+
+  async addFriend( friendId){
+    const user = await this.supabase.auth.getUser();
+    const { data, error } = await this.supabase
+  .from('friendrequest')
+  .insert([
+    { senderId: user.data.user.id,
+       recieverId: friendId}
+    
+  ])
+  .select()
+
+  if(error){
+    console.log("addFriend:", error)
+  }
+
+  }
+
+  async acceptFriendship(frindshipId, senderIdui,receiverIdui) {
+    let { data: friendrequest, error } = await this.supabase
+      .from('friendrequest')
+      .select('*')
+      .eq("id", frindshipId)
+      .single();
+    console.log('friendrequest', friendrequest);
+  
+    if (error) {
+      console.log("acceptFriendship:", error);
+      return false;
+    }
+  
+    try {
+      let senderFriends = await this.supabase.from('profiles').select('friends').eq('id', friendrequest['senderId']).single();
+      let recieverFriends =await this.supabase.from('profiles').select('friends').eq('id', friendrequest['recieverId']).single();
+      console.log("sender1",senderFriends.data['friends']);
+      console.log("receiver1",recieverFriends.data['friends']);
+      senderFriends.data['friends'].push(friendrequest['recieverId'])
+      recieverFriends.data['friends'].push(friendrequest['senderId'])
+
+      console.log("sender2",senderFriends.data['friends']);
+      console.log("receiver2",recieverFriends.data['friends']);
+      let data2,error2 = await this.supabase.from('profiles')
+        .update({ friends: recieverFriends.data['friends'] })
+        .eq('id', friendrequest['recieverId'])
+        .select();
+      console.log(data2);
+  
+      const { data, error }  = await this.supabase.from('profiles')
+        .update({ friends: senderFriends.data['friends'] })
+        .eq('id', friendrequest['senderId'])
+        .select();
+
+        console.log(error)
+  
+    } catch (error) {
+      console.log("acceptFriendship", error);
+    }
+    this.getUserProfile()
+  }
+  
+
+async bringMemebers(){
+let { data: profiles, error } = await this.supabase
+  .from('profiles')
+  .select('*')
+
+  return profiles
+}
+
+async bringFriendshipRequests(){
+  const user = this.profile
+  let { data: requests, error } = await this.supabase
+    .from('friendrequest')
+    
+    .select(`*, profiles(*)`)
+    .eq('recieverId', user.id )
+    
+  console.log("requests", requests)
+  console.log("requests", error)
+    return requests
+  }
+
+  async getFriends(friends){
+    return (await this.supabase.from('profiles').select('id,full_name,avatar_url').in('id',friends)).data
+  }
+
+
+
+  
+
+
+  showAlert(header: string, message: string) {
+    this.alertCtrl.create({
+      header,
+      message,
+      buttons: ['OK'],
+    }).then(alert => alert.present())
+  }
+  
+  createLoader() {
+    return this.loadingCtrl.create()
+  }
+
+  async uploadAvatar(filePath: string, file: File) {
+    
+    const data = await this.supabase.storage.from('avatars').upload(filePath, file ,{cacheControl: '3',upsert: true})
+    const url = await this.supabase.storage.from('avatars').getPublicUrl(this.profile.id)
+    this.updateProfile({avatar_url: url.data.publicUrl})
+    console.log(data.data)
+    return data
+
+
+  }
+
+}

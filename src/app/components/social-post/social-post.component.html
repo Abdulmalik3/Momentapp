@@ -1,0 +1,131 @@
+<ion-card *ngFor="let post of posts " class="ion-no-margin ion-margin-bottom">
+  <ion-card-content class="ion-no-margin ion-no-padding">
+    <ion-item class="pb-0" lines="none">
+      <ion-avatar class="avatar" slot="start">
+        <img src="{{post['profiles']['avatar_url']}}" >
+      </ion-avatar>
+      <ion-label>
+        <h4>
+
+
+          <ion-text class="bold" color="danger-tint">{{post['profiles']['full_name']}}</ion-text>
+        </h4>
+        <p>{{post['created_at']}}</p>
+      </ion-label>
+      <ion-buttons>
+        <ion-button (click)="toggleReactionsPopup(post)" color="danger">
+          <ion-icon name="heart" color="danger"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+
+    <!-- Reaction emojis/images container -->
+    <div (click)="getClickElement($event, post)" *ngIf="post.showRections" id="reactionsContainer"
+      class="reactionPopupModal">
+      <div class="reactionDiv shadow">
+        <ion-item class="peopleReactions ion-no-padding" lines="none">
+          <ion-buttons *ngFor="let reaction of reactions">
+            <ion-button (click)="toggleReactionsPopup(post)" fill="clear">
+              <img src="{{reaction['0']}}" (click)="reactOnTisPost(post['id'], reaction[1])" slot="icon-only">
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </div>
+    </div>
+
+
+
+    <div class="postStyle">
+      <ion-card-content class="ion-no-margin ion-no-padding">
+
+            <!-- Post with having both image and caption in it -->
+        <ion-item *ngIf="post['caption'] && post['img']" lines="none"
+        class="ion-no-padding ion-margin-start">
+            <ion-label class="ion-no-margin ion-no-padding">
+              <p class="ion-no-margin">{{post['caption']}}</p>
+            </ion-label>
+        </ion-item>
+
+        <!-- Post that have image in it -->
+        <img class="postImage" *ngIf="post['img']" src="{{post['img']}}">
+
+        <!-- Post with caption only -->
+        <div *ngIf="post['caption'] != null && !post['img'] && post['sleep'] === false" class="ion-text-center ion-padding dark">
+          {{post['caption']}}
+        </div>
+
+        <!-- Layout for the night posts -->
+        <div *ngIf="post['sleep'] === true" 
+        style="background-image: url('https://cdns-images.dzcdn.net/images/artist/3727561b2d09d3898bec620e873fbcc2/500x500.jpg');
+        background-size:cover;
+        background-position: center;" >
+        <div style="height: 110px;"></div>
+          <div class="ion-text-center ion-padding-top ion-margin-top">
+            <h2 class="bold ion-padding-top">
+              <ion-text color="light">{{post['caption']}}</ion-text>
+            </h2>
+            <p>
+              <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">Sleeping since {{post['created_at'] | date: 'shortTime'}}</ion-text>
+            </p>
+            <ion-chip color="medium">
+              <ion-icon color="light" name="moon"></ion-icon>
+              <ion-text color="light" class="bold">Send over a night post</ion-text>
+            </ion-chip>
+            <div class="ion-text-center">
+              <ion-button color="secondary" (click)="saveWakeupPost(post['created_at'])">Wake Up</ion-button>
+            </div>
+          </div>
+        </div>
+
+                <!-- Layout for the wakeup posts -->
+                <div *ngIf="post['wakeup'] > 5 && post['sleep'] === false" 
+                style="background-image: url('https://www.igp.com/blog/wp-content/uploads/2022/11/good-morning-img.jpg');
+                background-size:cover;
+                background-position: center;" >
+        <div style="height: 140px;"></div>
+                  <div class="ion-text-center ion-padding-top ion-margin-top">
+                    <h2 class="bold ion-padding-top">
+                      <ion-text color="light">{{post['caption']}}</ion-text>
+                    </h2>
+                    <p>
+                      <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">Slept for {{post['wakeup'] | date: 'H': 'UTC-3'}} hours and {{post['wakeup'] | date: 'mm': 'UTC-3'}} minutes</ion-text>
+                    </p>
+                    <ion-chip color="medium">
+                      <ion-icon color="light" name="moon"></ion-icon>
+                      <ion-text color="light" class="bold">Say Hi!</ion-text>
+                    </ion-chip>
+                    d
+                  </div>
+                </div>
+
+        <div class="peopleReacted">
+          <ion-item lines="none" class="ion-no-padding">
+            <!-- User reactions with their profile avatars -->
+            <ion-avatar *ngFor="let reaction of post['reactions']">
+              <img class="userAvatar" src="http://qupalcyhiytufftknrzr.supabase.co/storage/v1/object/public/avatars/{{reaction[0]}}">
+              <img class="reaction" [src]="getReactionIcon(reaction[1])">
+            </ion-avatar>
+
+            <!-- Comment button to open comments and textbox for a user to write comment -->
+            <ion-buttons class="commentButton" slot="end">
+              <ion-button (click)="openCommentsModal(post['id'])" color="dark" shape="round">
+                <ion-icon color="dark" name="chatbubble-ellipses-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </div>
+
+        <!-- Shows most recent comment at bottom -->
+        <ion-item class="ion-no-padding" lines="none">
+          <p>
+            <ion-text class="bold" color="dark">Davidson
+            </ion-text>
+            <ion-text color="medium">Lorem ipsum is a dummy text.</ion-text>
+          </p>
+        </ion-item>
+      </ion-card-content>
+    </div>
+
+  </ion-card-content>
+</ion-card>
+

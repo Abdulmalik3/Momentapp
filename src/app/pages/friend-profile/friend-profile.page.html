@@ -1,0 +1,74 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>User Profile</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openActionSheet()" shape="round">
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div>
+    <img class="coverImage"
+      src="https://media.istockphoto.com/id/1367290423/sv/foto/camping-under-the-stars.jpg?b=1&s=170667a&w=0&k=20&c=yGxZQuUTQ5evSYCdQAoerthGdCkNjs_1maQYbMdIi58=">
+
+    <ion-fab class="friendChatIcon" slot="start" horizontal="start">
+      <ion-fab-button color="danger" size="small">
+        <ion-icon name="person-add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-fab routerLink="/chat-screen" class="friendChatIcon" horizontal="end">
+      <ion-fab-button color="danger" size="small">
+        <ion-icon name="chatbox-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-avatar class="avatar">
+      <img src="https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=600"
+        alt="">
+    </ion-avatar>
+
+    <div class="ion-text-center">
+      <h5 class="ion-no-margin ion-padding-top bold">
+        <ion-text color="danger">gg</ion-text>
+      </h5>
+      <p class="ion-no-margin">"Art is Future"</p>
+      <p class="ion-no-margin">My Portfolio</p>
+    </div>
+  </div>
+
+  <div class="ion-padding ion-text-center">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <h4 class="ion-no-margin bold">32</h4>
+          <p class="ion-no-margin">
+            <ion-text color="medium">Posts</ion-text>
+          </p>
+        </ion-col>
+
+        <ion-col size="6">
+          <h4 class="ion-no-margin bold">1255</h4>
+          <p class="ion-no-margin">
+            <ion-text color="medium">Friends</ion-text>
+          </p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <h5 class="bold">
+      <ion-text color="dark">User Posts</ion-text>
+    </h5>
+
+    <app-social-post [posts]="allPosts"></app-social-post>
+
+  </div>
+
+</ion-content>

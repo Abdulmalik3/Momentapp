@@ -1,0 +1,175 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="danger">
+    <ion-title>
+      My Profile
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/settings" shape="round">
+        <ion-icon name="settings"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ion-fab id="hover-trigger" horizontal="end" vertical="top" slot="end">
+      <ion-fab-button size="small" color="danger">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-popover trigger="hover-trigger" triggerAction="hover">
+      <ng-template>
+        <ion-content>
+          <ion-item (click)="OpenGallery()">
+            <ion-icon color="danger" slot="start" name="camera"></ion-icon>
+            <p class="ion-no-margin">Edit Cover</p>
+          </ion-item>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+    <img class="coverImage"
+      src="https://media.istockphoto.com/id/1367290423/sv/foto/camping-under-the-stars.jpg?b=1&s=170667a&w=0&k=20&c=yGxZQuUTQ5evSYCdQAoerthGdCkNjs_1maQYbMdIi58="
+      alt="">
+    <ion-fab (click)="OpenGallery()" class="cameraIcon">
+      <ion-fab-button size="small" color="danger">
+        <ion-icon name="camera-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-avatar class="avatar">
+      <img src="{{profile['avatar_url']}}"
+        alt="">
+    </ion-avatar>
+    <div class="ion-text-center">
+
+      <h5 class="ion-no-margin ion-padding-top bold">
+        <ion-text color="danger">{{ profile['full_name'] }}</ion-text>
+      </h5>
+      <p class="ion-no-margin">"{{profile['bio']}}"</p>
+
+    </div>
+  </div>
+
+  <div class="ion-padding ion-text-center">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <h4 class="ion-no-margin bold">100</h4>
+          <p class="ion-no-margin">
+            <ion-text color="medium">Posts</ion-text>
+          </p>
+        </ion-col>
+
+        <ion-col routerLink="/my-friends" size="6">
+          <h4 class="ion-no-margin bold">{{friendsCount}}</h4>
+          <p class="ion-no-margin">
+            <ion-text color="medium">My Friends</ion-text>
+          </p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <h5>My Posts</h5>
+
+    <ion-card *ngFor="let post of allPosts" class="ion-no-margin ion-margin-bottom">
+      <ion-card-content class="ion-no-margin ion-no-padding">
+        <ion-item class="pb-0" lines="none">
+
+          <ion-label>
+            <p>{{post['created_at']}}</p>
+          </ion-label>
+          <ion-buttons>
+            <ion-button (click)="toggleReactionsPopup(post)" color="danger">
+              <ion-icon name="heart" color="danger"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+    
+        <!-- Reaction emojis/images container -->
+        <div (click)="getClickElement($event, post)" *ngIf="post.showRections" id="reactionsContainer"
+          class="reactionPopupModal">
+          <div class="reactionDiv shadow">
+            <ion-item class="peopleReactions ion-no-padding" lines="none">
+              <ion-buttons *ngFor="let reaction of reactions">
+                <ion-button (click)="toggleReactionsPopup(post)" fill="clear">
+                  <img src={{reaction}} slot="icon-only">
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+          </div>
+        </div>
+    
+        <!-- Post with having both image and caption in it -->
+        <ion-item *ngIf="post['caption'] && post['img'] && !post['sleep']" lines="none"
+          class="ion-no-padding ion-margin-start">
+          <ion-label class="ion-no-margin ion-no-padding">
+            <p class="ion-no-margin">{{post['caption']}}</p>
+          </ion-label>
+        </ion-item>
+    
+        <div class="postStyle">
+          <ion-card-content class="ion-no-margin ion-no-padding">
+    
+            <!-- Post with having image in it -->
+            <img class="postImage" *ngIf="post['img']" src="{{post['img']}}">
+    
+            <!-- Post with caption only -->
+            <div *ngIf="post['caption'] && !post['img']" class="ion-text-center ion-padding dark">
+              {{post['caption']}}
+            </div>
+    
+            <!-- Layout for the night posts -->
+            <div *ngIf="post['sleep']" class="upperLayer">
+              <div class="ion-text-center ion-padding-top ion-margin-top">
+                <h2 class="bold ion-padding-top">
+                  <ion-text color="light">{{post['caption']}}</ion-text>
+                </h2>
+                <p>
+                  <ion-text style="color:rgb(201, 201, 201)">Sleeping it's 09:00 PM.</ion-text>
+                </p>
+                <ion-chip color="medium">
+                  <ion-icon color="light" name="moon"></ion-icon>
+                  <ion-text color="light" class="bold">Send over a night post</ion-text>
+                </ion-chip>
+                <div class="ion-text-center">
+                  <ion-button color="secondary">Wake Up</ion-button>
+                </div>
+              </div>
+            </div>
+    
+            <div class="peopleReacted">
+              <ion-item lines="none" class="ion-no-padding">
+                <!-- User reactions with their profile avatars -->
+                <ion-avatar *ngFor="let reaction of post['reactions']">
+                  <img class="userAvatar" [src]="">
+                  <img class="reaction" [src]="getReactionIcon(reaction[1])">
+                </ion-avatar>
+    
+                <!-- Comment button to open comments and textbox for a user to write comment -->
+                <ion-buttons class="commentButton" slot="end">
+                  <ion-button  color="dark" shape="round">
+                    <ion-icon color="dark" name="chatbubble-ellipses-outline"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
+            </div>
+    
+            <!-- Shows most recent comment at bottom -->
+            <ion-item class="ion-no-padding" lines="none">
+              <p>
+                <ion-text class="bold" color="dark">Davidson
+                </ion-text>
+                <ion-text color="medium">Lorem ipsum is a dummy text.</ion-text>
+              </p>
+            </ion-item>
+          </ion-card-content>
+        </div>
+    
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+</ion-content>

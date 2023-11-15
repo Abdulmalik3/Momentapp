@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-title>
+      Social
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/notification" shape="round">
+        <ion-icon name="notifications"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item class="ion-margin-bottom searchBar" lines="none">
+    <ion-icon name="search-outline" color="danger" slot="start"></ion-icon>
+    <ion-input type="text" placeholder="Search here...."></ion-input>
+  </ion-item>
+
+  <app-social-post [posts]="allPosts"></app-social-post>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="danger">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="primary">
+        <ion-icon routerLink="/post" name="image"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="success">
+        <ion-icon (click)="showNightPost = true" name="moon"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+</ion-content>
+
+<div *ngIf="showNightPost" class="popupModal">
+  <div class="innerDiv" style="height: auto;">
+    <div  class="upperLayer" style="color:#4D00FF" >
+      <div class="ion-text-center ion-padding-top ion-margin-top">
+        <h2 class="bold ion-padding-top">
+          <ion-text style="color:#4D00FF">Sweet dreams</ion-text>
+        </h2>
+        <p>
+          <ion-text style="color:rgb(201, 201, 201)">It's 9:00 PM</ion-text>
+        </p>
+        <ion-chip color="medium">
+          
+          <ion-text color="light" class="bold">Send over a night post</ion-text>
+        </ion-chip>
+        <div class="ion-text-center">
+          <ion-button (click)="saveSleepPost()" style="color:#4D00FF">
+            Sleep  
+            <ion-icon color="light" name="moon"></ion-icon></ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

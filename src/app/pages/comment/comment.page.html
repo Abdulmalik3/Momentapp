@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar style="position: relative ;">
+    <ion-avatar class="ms-1" style="height:40px;width:40px" slot="start">
+      <img src="https://images.pexels.com/photos/716411/pexels-photo-716411.jpeg?auto=compress&cs=tinysrgb&w=600"
+        alt="">
+    </ion-avatar>
+    <ion-card style="border-radius: 20px;border:1px solid gray" class="ion-no-margin ms-1">
+      <ion-card-content class="ion-no-padding">
+        <ion-input type="text" [(ngModel)]="comment" placeholder="Add a comment..."></ion-input>
+      </ion-card-content>
+    </ion-card>
+    <ion-buttons slot="end">
+      <ion-fab-button (click)="addComment()" size="small" color="danger">
+        <ion-icon name="send" color="light"></ion-icon>
+      </ion-fab-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding" >
+<div >
+  <ion-item *ngFor="let comment of commentList "lines="none" class="ion-no-padding">
+    <ion-avatar slot="start">
+      <img src="https://images.pexels.com/photos/716411/pexels-photo-716411.jpeg?auto=compress&cs=tinysrgb&w=600"
+        alt="">
+    </ion-avatar>
+    <ion-label>
+      <h4 class="bold">{{comment['profiles']['full_name']}}</h4>
+      <p>{{comment['content']}}</p>
+    </ion-label>
+  </ion-item>
+</div>
+</ion-content>
+

@@ -1,0 +1,113 @@
+div {
+    .avatar {
+        position: absolute;
+        top: 130px !important;
+        height: 100px !important;
+        width: 100px !important;
+        left: 37%;
+        border: 2px solid #eb445a !important;
+    }
+}
+
+.coverImage {
+    height: 215px;
+    width: 100%;
+}
+
+ion-grid {
+    border: 1px solid #ffffff;
+    background: #ffffff !important;
+    border-radius: 10px;
+}
+
+.avatar {
+    border: 2px solid #eb445a;
+}
+
+ion-card {
+    border-radius: 10px !important;
+    border: 1px solid #ffffff;
+    box-shadow: 5px 5px 20px 0px rgb(240 239 239);
+
+    ion-card-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+
+        ion-item {
+            padding-bottom: 0 !important;
+        }
+
+        ion-card-content {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+    }
+}
+
+ion-item {
+    p {
+        padding-left: 5px !important;
+    }
+}
+
+.icons {
+    .icon1 {
+        position: absolute;
+        bottom: 13% !important;
+        left: 3%;
+        z-index: 999;
+        height: 20px;
+    }
+
+    .icon2 {
+        position: absolute;
+        bottom: 13% !important;
+        left: 13% !important;
+        height: 20px;
+        z-index: 999;
+    }
+
+    .icon3 {
+        position: absolute;
+        bottom: 13% !important;
+        left: 22% !important;
+        height: 20px;
+        z-index: 999;
+    }
+}
+
+.friendChatIcon {
+    position: absolute;
+    top: 157px !important
+}
+
+ion-popover {
+    ng-template {
+        ion-content {
+            --background: white !important;
+
+            ion-item {
+                --background: white !important;
+            }
+        }
+    }
+}
+
+.commentButton {
+    margin: -14px !important;
+}
+
+.postStyle {
+    ion-card-content {
+        img {
+            border-radius: 25px 25px 0 0 !important;
+        }
+
+        ion-item {
+            ion-avatar {
+                height: 30px !important;
+                width: 30px !important;
+            }
+        }
+    }
+}

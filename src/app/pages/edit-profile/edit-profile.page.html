@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-card-content class="ion-no-padding">
+    <div style="position: relative;" class="ion-text-center">
+      <ion-avatar style="margin: auto;height: 140px; width: 140px;">
+        <img class="profileImage" style="height: 100%; width:100%;object-fit: cover;"
+          src="{{profile.avatar_url}}">
+
+          
+      </ion-avatar>
+      <ion-fab (click)="uploadAvatar()" vertical="bottom" slot="fixed" horizontal="center">
+        <ion-fab-button color="danger" style="margin-left: 18px;" size="small">
+          <ion-icon name="camera-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
+
+    <div class="ion-text-center">
+      <h2 class="bold mt-1">
+        <ion-text color="danger">{{profile['full_name']}}</ion-text>
+      </h2>
+      <p class="m-0">admin@gmail.com</p>
+    </div>
+  </ion-card-content>
+
+  <ion-item lines="none" class="ion-margin-top">
+    <ion-icon color="danger" slot="start" name="person-outline"></ion-icon>
+    <ion-input type="text" [(ngModel)]="name" placeholder="Full Name"></ion-input>
+  </ion-item>
+  <ion-item lines="none" class="ion-margin-top">
+    <ion-icon color="danger" slot="start" name="person-outline"></ion-icon>
+    <ion-input type="text" [(ngModel)]="bio" placeholder="This is my bio..."></ion-input>
+  </ion-item>
+
+
+  <ion-item lines="none">
+    <ion-icon slot="start" color="danger" name="male-female-outline"></ion-icon>
+    <ion-select [(ngModel)]="gender" placeholder={{gender}} multiple="false">
+      <ion-select-option slot="end" value="male">Male</ion-select-option>
+      <ion-select-option slot="end" value="female">Female</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-icon color="danger" slot="start" name="calendar-number-outline"></ion-icon>
+    <ion-input type="date" color="medium" placeholder="Date Of Birth" [(ngModel)]="dob"></ion-input>
+  </ion-item>
+
+  <ion-button routerDirection="root" (click)="updateProfile()" expand="block" color="danger">
+    Update Profile
+  </ion-button>
+
+  <ion-modal></ion-modal>
+
+</ion-content>

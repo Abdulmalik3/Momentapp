@@ -1,0 +1,13 @@
+ion-item {
+    border-radius: 10px;
+
+    ion-avatar {
+        img {
+            object-fit: cover;
+        }
+    }
+}
+
+.searchBar {
+    border-radius: 30px !important;
+}
