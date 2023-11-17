@@ -16,7 +16,6 @@ export class ApiService {
     )
   profile = JSON.parse(localStorage.getItem('profile'))
   profileobject = JSON.parse(localStorage.getItem('profile'));
-  friendship
   members
   constructor(private router: Router,
     private loadCtr: LoadingController,
@@ -41,8 +40,6 @@ export class ApiService {
         this.getUserProfile()
 
 
-        this.friendship = this.bringFriendshipRequests().then(data=> {return data})
-        console.log("Supabase constructor | friendship", this.friendship)
         this.members = this.bringMemebers().then(data=> {return data})
         console.log("Supabase constructor | members", this.members)
 
