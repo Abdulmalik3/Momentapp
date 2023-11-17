@@ -28,7 +28,7 @@
       <h2 class="bold mt-1">
         <ion-text color="danger">{{profile['full_name']}}</ion-text>
       </h2>
-      <p class="m-0">admin@gmail.com</p>
+      <p class="m-0">{{profile['bio']}}</p>
     </div>
   </ion-card-content>
 
@@ -37,7 +37,7 @@
     <ion-input type="text" [(ngModel)]="name" placeholder="Full Name"></ion-input>
   </ion-item>
   <ion-item lines="none" class="ion-margin-top">
-    <ion-icon color="danger" slot="start" name="person-outline"></ion-icon>
+    <ion-icon color="danger" slot="start" name="information-circle-outline"></ion-icon>
     <ion-input type="text" [(ngModel)]="bio" placeholder="This is my bio..."></ion-input>
   </ion-item>
 
