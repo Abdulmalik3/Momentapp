@@ -71,7 +71,7 @@
               <ion-icon color="light" name="moon"></ion-icon>
               <ion-text color="light" class="bold">Send over a night post</ion-text>
             </ion-chip>
-            <div class="ion-text-center">
+            <div class="ion-text-center" *ngIf="post['authorId'] === myId">
               <ion-button color="secondary" (click)="saveWakeupPost(post['created_at'])">Wake Up</ion-button>
             </div>
           </div>

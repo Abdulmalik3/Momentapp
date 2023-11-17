@@ -18,6 +18,8 @@ export class SocialPostComponent implements OnInit {
   @ViewChild('popover') popover: any;
  profile: any;
  @Input() posts
+ @Input() myId
+
  
 
   reactions= [
@@ -43,6 +45,7 @@ export class SocialPostComponent implements OnInit {
 
   ngOnInit() { 
     this.profile = this.apiService.profile
+    console.log('myId',this.myId)
   }
 
   getReactionIcon(reaction: string): string {

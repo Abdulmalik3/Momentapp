@@ -14,11 +14,12 @@
     <ion-input type="text" placeholder="Search here...."></ion-input>
   </ion-item>
 
-  <ion-item *ngFor="let friend of friendList" lines="none" class="ion-margin-bottom">
+  <ion-item *ngFor="let friend of friendList" lines="none" class="ion-margin-bottom" (click)="moveToMyfriendsProfile(friend)">
+    
     <ion-avatar routerLink="/friend-profile" slot="start">
       <img src={{friend.avatar_url}}>
     </ion-avatar>
-    <ion-label (click)="moveToMyfriendsProfile(friend)" >
+    <ion-label  >
       <h3 class="bold">{{friend.full_name}}</h3>
       <p>{{friend.bio}}</p>
     </ion-label>

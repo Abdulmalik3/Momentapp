@@ -31,7 +31,7 @@
     </ion-fab>
 
     <ion-avatar class="avatar">
-      <img src="https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=600"
+      <img src="{{friendProfile.avatar_url}}"
         alt="">
     </ion-avatar>
 
@@ -39,8 +39,8 @@
       <h5 class="ion-no-margin ion-padding-top bold">
         <ion-text color="danger">{{friendProfile.full_name}}</ion-text>
       </h5>
-      <p class="ion-no-margin">"Art is Future"</p>
-      <p class="ion-no-margin">My Portfolio</p>
+      <p class="ion-no-margin">{{friendProfile.bio}}</p>
+
     </div>
   </div>
 
@@ -55,7 +55,7 @@
         </ion-col>
 
         <ion-col size="6">
-          <h4 class="ion-no-margin bold">{{friendProfile.friends.length}}</h4>
+          <h4 class="ion-no-margin bold">{{friendProfile.friends.length - 1}}</h4>
           <p class="ion-no-margin">
             <ion-text color="medium">Friends</ion-text>
           </p>

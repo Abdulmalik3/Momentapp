@@ -139,12 +139,27 @@ async loadUser() {
   }
   //update user's password
   async updatePassword(newPassword: string) {
-    const user = await this.supabase.auth.getUser()
+
+    const user = this.profile.id
+    
+    await this.loadCtr.create({
+      message: 'Updating password...',
+      duration: 3000
+
+    }).then(loading => loading.present())
+
     const { error } = await this.supabase.auth.updateUser ( {password: newPassword})
+    this.loadCtr.dismiss()
     if (error) {
       console.log(error)
+      this.showAlert("Can't change password",error.message)
       return error
-    }}
+    }else{
+      return true
+    }
+
+
+  }
 
 
     async updateProfile(data ){
@@ -350,7 +365,7 @@ async loadUser() {
   }
 
   async saveComment(comment) {
-    this.loadCtr.create({
+    await this.loadCtr.create({
       message: 'Saving post...'
     }).then(loading => loading.present())
 
@@ -476,7 +491,7 @@ async bringFriendshipRequests(){
   }
 
   async getFriends(friends){
-    return (await this.supabase.from('profiles').select('id,full_name,avatar_url,friends').in('id',friends)).data
+    return (await this.supabase.from('profiles').select('id,full_name,avatar_url,friends,bio').in('id',friends)).data
   }
 
 

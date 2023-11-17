@@ -20,6 +20,7 @@ export class Tab1Page {
   profile
   isOpen = false;
   allPosts
+  userId
 
 
   constructor(
@@ -30,9 +31,11 @@ export class Tab1Page {
      private route: ActivatedRoute
   ) {
     //this.allPosts = this.apiService.getPosts()
+    apiService.getUserProfile()
     this.profile = this.apiService.profile
     this.updateFeeds()
-    apiService.getUserProfile()
+    this.userId = this.profile.id
+    
   }
 
   async ngOnInit() {
