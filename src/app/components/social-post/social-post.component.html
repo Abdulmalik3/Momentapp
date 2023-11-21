@@ -102,7 +102,7 @@
           <ion-item lines="none" class="ion-no-padding">
             <!-- User reactions with their profile avatars -->
             <ion-avatar *ngFor="let reaction of post['reactions']">
-              <img class="userAvatar" src="http://qupalcyhiytufftknrzr.supabase.co/storage/v1/object/public/avatars/{{reaction[0]}}">
+              <img class="userAvatar" [src]="getAvatarURL(reaction[0])">
               <img class="reaction" [src]="getReactionIcon(reaction[1])">
             </ion-avatar>
 

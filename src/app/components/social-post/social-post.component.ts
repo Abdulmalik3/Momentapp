@@ -48,6 +48,9 @@ export class SocialPostComponent implements OnInit {
     console.log('myId',this.myId)
   }
 
+  getAvatarURL(id){
+    return "http://qupalcyhiytufftknrzr.supabase.co/storage/v1/object/public/avatars/"+id
+  }
   getReactionIcon(reaction: string): string {
     switch(reaction){
       case 'love':

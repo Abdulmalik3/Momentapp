@@ -16,17 +16,12 @@
   <h4 class="bold ion-padding-start">Earlier</h4>
   <ion-item routerLink="/tabs/tab3" *ngFor="let notify of notificationList">
     <ion-avatar slot="start">
-      <img src={{notify.userProfile}} alt="">
+      <img src="{{notify['profiles']['avatar_url']}}" alt="">
     </ion-avatar>
     <ion-label>
-      <h3>{{notify.username}}</h3>
-      <p>{{notify.comment}}</p>
+      <p *ngIf="notify['type_id'] === 4"> {{notify['profiles']['full_name']}} smiled on your post</p>
+      
       <p>{{notify.commentTime}}</p>
     </ion-label>
-    <ion-buttons slot="end">
-      <ion-button shape="round">
-        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-item>
 </ion-content>

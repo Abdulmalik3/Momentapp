@@ -339,7 +339,7 @@ async loadUser() {
     try{
       let { data: currentReactions, error } = await this.supabase
       .from('posts')
-      .select('reactions')
+      .select('reactions,authorId')
       .eq("id", postId )
       .single();
       console.log("current reactions",currentReactions)
@@ -354,8 +354,10 @@ async loadUser() {
         currentReactions['reactions'].unshift(newData)
       }}
 
+
       let { data, error: r } = await this.supabase.from('posts').update({reactions: currentReactions['reactions']}).eq('id', postId).select()
-      console.log(r,error)
+      console.log("data from reacting ",currentReactions ,r,error)
+      await this.makeNotification(this.profile.id,postId,4, currentReactions['authorId'])
     }catch(error){
       console.log(error)
     }
@@ -491,6 +493,45 @@ async bringFriendshipRequests(){
     return (await this.supabase.from('profiles').select('id,full_name,avatar_url,friends,bio').in('id',friends)).data
   }
 
+
+  //notifications
+
+  async makeNotification(actorID, actedOn, typeId, notifyerId){
+    /*
+    typeId: 
+    1: commented on your post 
+    2: mentioned you comment in his reply
+    3: taged you in his post
+    */ 
+
+    let notification = {
+      actor_id: actorID,
+      acted_on: actedOn,
+      type_id: typeId,
+      notifyer_id : notifyerId
+    }
+
+    let {data,error} = await this.supabase.from('notifications')
+    .insert(notification)
+    console.log("notification",notification, error)
+  }
+
+  async getAllUserNotifications(conditions = ''){
+    if(conditions === ''){
+      let {data,error} = await this.supabase
+      .from('notifications')
+      .select('*,profiles(full_name,avatar_url)')
+      .eq('notifyer_id',this.profile.id)
+
+      if(error){
+        console.log(error)
+        return false
+      }
+      return data
+
+    }
+    
+  }
 
 
   

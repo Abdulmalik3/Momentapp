@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
 import { DataHelperService } from 'src/app/shared/data-helper.service';
 import { iNotification } from 'src/app/shared/models';
 
@@ -9,13 +10,16 @@ import { iNotification } from 'src/app/shared/models';
 })
 export class NotificationPage implements OnInit {
 
-  notificationList: iNotification[] = []
+  notificationList
 
-  constructor(public dataHelper: DataHelperService) {
-    this.notificationList = this.dataHelper.notificationList;
+  constructor(public dataHelper: DataHelperService,
+              private apiService: ApiService) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+
+    this.notificationList = await this.apiService.getAllUserNotifications()
+    
   }
 
 }
