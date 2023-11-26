@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../services/api.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -13,8 +14,13 @@ export class Tab2Page {
   friendshipRequest
   searchinput
 
-  constructor(private apiService: ApiService) {
-
+  constructor(private apiService: ApiService,
+    private actRoute: ActivatedRoute) {
+    this.actRoute.queryParams.subscribe(parms => {
+      console.log("url parms", parms)
+      this.activeTab = parms['activeTab']
+ 
+    })
    }
 
    async ngOnInit() {

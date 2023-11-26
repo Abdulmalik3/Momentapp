@@ -71,6 +71,10 @@ const routes: Routes = [
   {
     path: 'friend-profile',
     loadChildren: () => import('./pages/friend-profile/friend-profile.module').then( m => m.FriendProfilePageModule)
+  },
+  {
+    path: 'comments-withpost',
+    loadChildren: () => import('./pages/comments-withpost/comments-withpost.module').then( m => m.CommentsWithpostPageModule)
   }
 
 

@@ -223,9 +223,10 @@ async loadUser() {
       .from('profiles')
       .select('*')
       .eq('id', id)
+      .single()
   
    
-    console.log("friends profile:", data.data.toString())
+    console.log("friends profile:", data.data)
     return data.data
 
 
@@ -233,8 +234,8 @@ async loadUser() {
 
   //posts :
 
-  async getPosts() {
-    const { data, error } = await this.supabase.from('posts').select('*')
+  async getOnePost(postId) {
+    const { data, error } = await this.supabase.from('posts').select('*').eq('id',postId).single()
     if (error) {
       console.log(error)
       return error
@@ -244,17 +245,15 @@ async loadUser() {
   }
 
   async getPost(id: string) {
-    var data 
-
-    await this.supabase
+    var data = await this.supabase
       .from('posts')
       .select('*, profiles(id,full_name, avatar_url)')
       .eq('authorId', id)
       .order('created_at', { ascending: true })
-      .then((result) => { data = result.data})
-      console.log(data)
+      
+      console.log("posts by id:", data.data)
 
-    return data
+    return data.data
   }
 
  
@@ -334,7 +333,7 @@ async loadUser() {
 
   }
 
-  async reactToPost(postId, reaction){
+  async reactToPost(postId, reaction, typeId){
     const user = this.profile;
     try{
       let { data: currentReactions, error } = await this.supabase
@@ -357,13 +356,13 @@ async loadUser() {
 
       let { data, error: r } = await this.supabase.from('posts').update({reactions: currentReactions['reactions']}).eq('id', postId).select()
       console.log("data from reacting ",currentReactions ,r,error)
-      await this.makeNotification(this.profile.id,postId,4, currentReactions['authorId'])
+      await this.makeNotification(this.profile.id,postId,typeId, currentReactions['authorId'])
     }catch(error){
       console.log(error)
     }
   }
 
-  async saveComment(comment) {
+  async saveComment(comment,notifyerId) {
     await this.loadCtr.create({
       message: 'Saving post...'
     }).then(loading => loading.present())
@@ -371,6 +370,9 @@ async loadUser() {
     const { data, error } = await this.supabase.
                             from('comments')
                             .insert(comment)
+          if (!error){
+            this.makeNotification(this.profile.id, comment.postId ,1,notifyerId)
+          }
     this.loadCtr.dismiss()
 
     if (error) {
@@ -415,6 +417,8 @@ async loadUser() {
 
   if(error){
     console.log("addFriend:", error)
+  }else{
+    this.makeNotification(this.profile.id, "friend request",10,friendId)
   }
 
   }
@@ -454,6 +458,8 @@ async loadUser() {
         .select();
 
         console.log(error)
+        await this.makeNotification(this.profile.id, "friend request",11,friendrequest['senderId'])
+
   
     } catch (error) {
       console.log("acceptFriendship", error);
@@ -502,6 +508,14 @@ async bringFriendshipRequests(){
     1: commented on your post 
     2: mentioned you comment in his reply
     3: taged you in his post
+    4: smile
+    5: laughed
+    6: loved
+    7: liked
+    8: disliked
+    9: sad
+    10: friendship Request
+    11: Accepted friendship request
     */ 
 
     let notification = {

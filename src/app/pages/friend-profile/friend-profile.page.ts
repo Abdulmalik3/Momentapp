@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { DataHelperService } from 'src/app/shared/data-helper.service';
@@ -15,6 +16,7 @@ export class FriendProfilePage implements OnInit {
   friendProfile = JSON.parse(localStorage.getItem('myFriend'))
   postCount
   isOpen = false;
+  friendId
 
   presentPopover(e: Event) {
     this.popover.event = e;
@@ -24,8 +26,10 @@ export class FriendProfilePage implements OnInit {
   constructor(
     private actionSheetCtrl: ActionSheetController,
     private dataHelper: DataHelperService,
-    private ApiService: ApiService
+    private ApiService: ApiService,
+    private actRoute: ActivatedRoute
   ) {
+
   }
 
   async openActionSheet() {
@@ -64,13 +68,16 @@ export class FriendProfilePage implements OnInit {
   }
 
   async ngOnInit() {
-
-    
-
-    this.allPosts = await this.ApiService.getPost(this.friendProfile.id)
+    this.actRoute.queryParams.subscribe(parms => {
+      console.log("url parms", parms)
+      this.friendId = parms['friendId']
+ 
+    })
+    console.log(this.friendProfile)
+    this.allPosts = await this.ApiService.getPost(this.friendProfile.id) || []
     this.postCount = this.allPosts.length
     console.log("count",this.allPosts.length)
-    console.log(this.friendProfile)
+
 
   }
 

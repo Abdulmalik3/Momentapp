@@ -23,12 +23,12 @@ export class SocialPostComponent implements OnInit {
  
 
   reactions= [
-    ['../../../assets/images/in-love.png','love'],
-    ['../../../assets/images/love.png','love2'],
-    ['../../../assets/images/like.png','likes'],
-    ['../../../assets/images/dislike.png','dislike'],
-    ['../../../assets/images/laughing.png', 'laugh'],
-    ['../../../assets/images/sad.png','sad']
+    ['../../../assets/images/in-love.png','love',6],
+    ['../../../assets/images/love.png','love2',6],
+    ['../../../assets/images/like.png','likes',7],
+    ['../../../assets/images/dislike.png','dislike',8],
+    ['../../../assets/images/laughing.png', 'laugh',5],
+    ['../../../assets/images/sad.png','sad',9]
   ];
 
   constructor(
@@ -96,18 +96,19 @@ export class SocialPostComponent implements OnInit {
   updateFeeds(){
     this.posts = this.apiService.getFeed()
   }
-  async reactOnTisPost(postId,reactionType){
+  async reactOnTisPost(postId,reactionType,typeId){
 
-    await this.apiService.reactToPost(postId,reactionType)
+    await this.apiService.reactToPost(postId,reactionType,typeId)
 
   }
-  async openCommentsModal(postId) {
+  async openCommentsModal(postId,notifyerId) {
     const modal = await this.modalCtrl.create({
       breakpoints: [0.5, 0.5, 0.5, 1],
       initialBreakpoint: 0.8,
       component: CommentPage,
       componentProps:{
-        postId: postId
+        postId: postId,
+        notifyerId: notifyerId
       },
       cssClass: "modal-hight"
       

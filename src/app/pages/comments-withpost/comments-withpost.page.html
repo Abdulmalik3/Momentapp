@@ -1,0 +1,128 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Comments</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+
+
+  <ion-card  class="ion-no-margin ion-margin-bottom">
+
+  <div *ngIf='post' class="postStyle">
+    <ion-card-content class="ion-no-margin ion-no-padding">
+
+          <!-- Post with having both image and caption in it -->
+      <ion-item *ngIf="post['caption'] && post['img']" lines="none"
+      class="ion-no-padding ion-margin-start">
+          <ion-label class="ion-no-margin ion-no-padding">
+            <p class="ion-no-margin">{{post['caption']}}</p>
+          </ion-label>
+      </ion-item>
+
+      <!-- Post that have image in it -->
+      <img class="postImage" *ngIf="post['img']" src="{{post['img']}}">
+
+      <!-- Post with caption only -->
+      <div *ngIf="post['caption'] != null && !post['img'] && post['sleep'] === false" class="ion-text-center ion-padding dark">
+        {{post['caption']}}
+      </div>
+
+      <!-- Layout for the night posts -->
+      <div *ngIf="post['sleep'] === true" 
+      style="background-image: url('https://cdns-images.dzcdn.net/images/artist/3727561b2d09d3898bec620e873fbcc2/500x500.jpg');
+      background-size:cover;
+      background-position: center;" >
+      <div style="height: 110px;"></div>
+        <div class="ion-text-center ion-padding-top ion-margin-top">
+          <h2 class="bold ion-padding-top">
+            <ion-text color="light">{{post['caption']}}</ion-text>
+          </h2>
+          <p>
+            <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">Sleeping since {{post['created_at'] | date: 'shortTime'}}</ion-text>
+          </p>
+          <ion-chip color="medium">
+            <ion-icon color="light" name="moon"></ion-icon>
+            <ion-text color="light" class="bold">Send over a night post</ion-text>
+          </ion-chip>
+
+        </div>
+      </div>
+
+              <!-- Layout for the wakeup posts -->
+              <div *ngIf="post['wakeup'] > 5 && post['sleep'] === false" 
+              style="background-image: url('https://www.igp.com/blog/wp-content/uploads/2022/11/good-morning-img.jpg');
+              background-size:cover;
+              background-position: center;" >
+      <div style="height: 140px;"></div>
+                <div class="ion-text-center ion-padding-top ion-margin-top">
+                  <h2 class="bold ion-padding-top">
+                    <ion-text color="light">{{post['caption']}}</ion-text>
+                  </h2>
+                  <p>
+                    <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">Slept for {{post['wakeup'] | date: 'H': 'UTC-3'}} hours and {{post['wakeup'] | date: 'mm': 'UTC-3'}} minutes</ion-text>
+                  </p>
+                  <ion-chip color="medium">
+                    <ion-icon color="light" name="moon"></ion-icon>
+                    <ion-text color="light" class="bold">Say Hi!</ion-text>
+                  </ion-chip>
+                  d
+                </div>
+              </div>
+
+      <div class="peopleReacted">
+        <ion-item lines="none" class="ion-no-padding">
+          <!-- User reactions with their profile avatars -->
+          <ion-avatar *ngFor="let reaction of post['reactions']">
+            <img class="userAvatar" [src]="getAvatarURL(reaction[0])">
+            <img class="reaction" [src]="getReactionIcon(reaction[1])">
+          </ion-avatar>
+
+        </ion-item>
+      </div>
+
+
+    </ion-card-content>
+  </div>
+  </ion-card>
+
+
+  <!-- comments -->
+  <ion-card *ngFor="let comment of commentList" class="ion-no-margin" style="margin-bottom: 1px;">
+    
+  <ion-item lines="none" >
+    <ion-avatar slot="start">
+      <img src="{{comment.profiles.avatar_url}}"
+        alt="">
+    </ion-avatar>
+    <ion-label>
+      <h4 class="bold"> {{comment.profiles.full_name}}</h4>
+      <p> {{comment.content}}</p>
+    </ion-label>
+  </ion-item>
+  </ion-card>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-avatar class="ms-1" style="height:40px;width:40px" slot="start">
+      <img src="{{profile.avatar_url || ''}}"
+        alt="">
+    </ion-avatar>
+    <ion-card style="border-radius: 20px;border:1px solid gray" class="ion-no-margin ms-1">
+      <ion-card-content class="ion-no-padding">
+        <ion-input [(ngModel)]="comment" type="text" placeholder="Add a comment..."></ion-input>
+      </ion-card-content>
+    </ion-card>
+    <ion-buttons slot="end">
+      <ion-fab-button (click)="addComment()" size="small" color="danger">
+        <ion-icon name="send" color="light"></ion-icon>
+      </ion-fab-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
