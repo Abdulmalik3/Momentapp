@@ -5,8 +5,10 @@
     </ion-title>
     <ion-buttons slot="end">
       <ion-button routerLink="/notification" shape="round">
-        <ion-icon name="notifications"></ion-icon>
-      </ion-button>
+        <ion-icon name="notifications">
+        </ion-icon>
+        <ion-icon *ngIf="newNotification === 'true'" class="notification1" name="notifications-circle-outline"></ion-icon>
+            </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

@@ -9,3 +9,12 @@
         object-fit: cover;
     }
 }
+.notification1 {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    z-index: 999;
+    left: 15px;
+    object-fit: contain;
+    top: 21px;
+}

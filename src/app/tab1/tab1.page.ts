@@ -21,6 +21,7 @@ export class Tab1Page {
   isOpen = false;
   allPosts
   userId
+  newNotification 
 
 
   constructor(
@@ -39,6 +40,7 @@ export class Tab1Page {
   }
 
   async ngOnInit() {
+    this.newNotification = await localStorage.getItem('newNotifications')
 
     this.connectTorealtime()
     
@@ -51,7 +53,9 @@ export class Tab1Page {
          this.apiService.getUserProfile()
         // Call your function here
         this.updateFeeds()
+        this.apiService.checkNontifications()
         this.connectTorealtime();
+        this.newNotification =  localStorage.getItem('newNotifications')
       }
     });
 

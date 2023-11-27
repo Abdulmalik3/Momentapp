@@ -38,6 +38,7 @@ export class ApiService {
         
         this.loadUser()
         this.getUserProfile()
+        this.checkNontifications()
 
 
         this.members = this.bringMemebers().then(data=> {return data})
@@ -536,15 +537,51 @@ async bringFriendshipRequests(){
       .from('notifications')
       .select('*,profiles(full_name,avatar_url)')
       .eq('notifyer_id',this.profile.id)
+      .order('created_at', { ascending: false })
+      .limit(12)
+
+
+
+
+
 
       if(error){
         console.log(error)
         return false
       }
+      let lastNotification = data[data.length -1]['id']
+      console.log(lastNotification)
+      await localStorage.setItem('lastNotification', lastNotification)
       return data
 
     }
     
+  }
+    //need to be more efficient
+  async checkNontifications(){
+    let lastNotification = Number(await localStorage.getItem('lastNotification')) 
+    console.log('last notification id =' ,Number(lastNotification))
+    if(!lastNotification){
+      await localStorage.setItem('newNotifications', 'false')
+      return false
+    }
+
+    let data = await this.supabase
+    .from('notifications')
+    .select('id')
+    .eq('notifyer_id',this.profile.id)
+    .gt('id', lastNotification)
+
+
+    console.log('last notification data ' ,data.data)
+
+    if(data.data.length > 0 ){
+      console.log('there is a new notification')
+      await localStorage.setItem('newNotifications', 'true')
+    }else{
+      console.log('there is no new notification')
+      await localStorage.setItem('newNotifications', 'false')
+    }
   }
 
 
