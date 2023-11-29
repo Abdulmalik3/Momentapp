@@ -314,6 +314,7 @@ async loadUser() {
   //save post
 
   async savePost(post) {
+    post.created_at = Date.now()
     await this.loadCtr.create({
       message: 'Saving post...'
     }).then(loading => loading.present())
@@ -367,6 +368,8 @@ async loadUser() {
     await this.loadCtr.create({
       message: 'Saving post...'
     }).then(loading => loading.present())
+    comment.created_at = Date.now()
+
 
     const { data, error } = await this.supabase.
                             from('comments')
@@ -424,7 +427,7 @@ async loadUser() {
 
   }
 
-  async acceptFriendship(frindshipId, senderIdui,receiverIdui) {
+  async acceptFriendship(frindshipId) {
     let { data: friendrequest, error } = await this.supabase
       .from('friendrequest')
       .select('*')
@@ -487,7 +490,6 @@ async bringFriendshipRequests(){
   const user = this.profile
   let { data: requests, error } = await this.supabase
     .from('friendrequest')
-    
     .select(`*, profiles(*)`)
     .eq('recieverId', user.id )
     
@@ -498,6 +500,23 @@ async bringFriendshipRequests(){
 
   async getFriends(friends){
     return (await this.supabase.from('profiles').select('id,full_name,avatar_url,friends,bio').in('id',friends)).data
+  }
+  
+  async checkFriendshipRequests(myId,friendId){
+
+    //added by me
+    var {data , error} = await this.supabase.from("friendrequest").select("id").eq('senderId', myId).eq('recieverId', friendId)
+    console.log(data , error)
+    if(data.length > 0 ){
+      return [1, data]
+    }
+    //to accept
+    var data2 = await this.supabase.from("friendrequest").select("id").eq('senderId', friendId).eq('recieverId',  myId)
+    if(data2.data.length > 0){
+      return [2 ,data2.data[0]['id']]
+    }
+    // no requests
+    return false
   }
 
 

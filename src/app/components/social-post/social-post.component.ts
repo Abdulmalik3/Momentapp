@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { ModalController, NavController } from '@ionic/angular';
+import { IonModal, ModalController, NavController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { DataHelperService, Reactions } from 'src/app/shared/data-helper.service';
 import { CommentsModalComponent } from '../comments-modal/comments-modal.component';
@@ -17,6 +17,8 @@ export class SocialPostComponent implements OnInit {
   Reaction: boolean;
   @ViewChild('popover') popover: any;
   @ViewChild('popover2') popover2: any;
+  @ViewChild(IonModal) modal: IonModal;
+
 
   profile: any;
  @Input() posts
@@ -24,6 +26,7 @@ export class SocialPostComponent implements OnInit {
  isOpen = false
  showUserProfile
  FriendData
+
 
 
  
@@ -151,17 +154,14 @@ export class SocialPostComponent implements OnInit {
   async openModal(id){
     this.isOpen = true
     this.FriendData = await this.apiService.getUserProfileById(id)
+    //if(this.profile.friends.includes)
+
   }
 
   timeAgo(value){
-    var offset = new Date().getTimezoneOffset() * 1000;
-    //console.log("time zone is", offset)
+ 
     if (!value) { return 'a long time ago'; }
-    let local = new Date(value)
-    let dateFromDatabase = Date.parse(value)
-   // console.log("time zone is", dateFromDatabase)
-    let dateNow = Date.now() 
-    let time = (dateNow - dateFromDatabase ) / 1000;
+    let time = (Date.now() - value) / 1000;
     if (time < 10) {
       return 'just now';
     } else if (time < 60) {
@@ -175,9 +175,36 @@ export class SocialPostComponent implements OnInit {
     }
     const plural = Math.floor(time) > 1 ? 's' : '';
     return Math.floor(time) + string[i] + plural + ' ago';
+
+  }
+  sleptFor(value){
+ 
+    if (!value) { return 'a long time ago'; }
+    let time = (Date.now() - value) / 1000;
+
+     if (time < 60) {
+      return 'less than a minute';
+    }
+    const divider = [60, 60, 24, 30, 12];
+    const string = [' second', ' minute', ' hour', ' day', ' month', ' year'];
+    let i;
+    for (i = 0; Math.floor(time / divider[i]) > 0; i++) {
+      time /= divider[i];
+    }
+    const plural = Math.floor(time) > 1 ? 's' : '';
+    return "Slept for " + Math.floor(time) + string[i] + plural ;
+
   }
 
+  async visitFriend(friendData){
 
+    //set localStorag 
+    await localStorage.setItem('myFriend', JSON.stringify(friendData))
+    this.modal.dismiss()
+    this.FriendData = []
+    this.navCtrl.navigateForward('/friend-profile')
+
+  }
 
 }
 

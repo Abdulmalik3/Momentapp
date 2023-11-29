@@ -9,10 +9,11 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class Tab2Page {
 
-  friendList
+  friendList = []
   activeTab = "friendList"
   friendshipRequest
   searchinput
+  profile = this.apiService.profile
 
   constructor(private apiService: ApiService,
     private actRoute: ActivatedRoute) {
@@ -40,7 +41,7 @@ async addFriend(id){
 }
 
 async acceptFriend(id,senderId,recieverdId){
-  const data = await this.apiService.acceptFriendship(id,senderId,recieverdId)
+  const data = await this.apiService.acceptFriendship(id)
   const index = this.friendshipRequest.findIndex(item => item.id === id);
         
       
@@ -64,11 +65,36 @@ async acceptFriend(id,senderId,recieverdId){
 
     let data = await this.apiService.searchForFriends(this.searchinput)
     if(data.length >= 1 ){
-      this.friendList = data
+  
+      
+        for(let friend of data){
+          if(friend['id'] === this.profile.id ){
+            console.log('this is me!!')
+
+          }else{
+        let ff = await this.apiService.checkFriendshipRequests(this.apiService.profile.id, friend['id'])
+        if(ff[0] === 1){
+          friend['friendShipStatues'] = 1
+        }else if( ff[0] === 2){
+          friend['friendShipStatues'] = 2 
+          friend['friendshipId'] = ff[1]
+          console.log("friendship Id : " + friend['friendshipId'])
+
+        }else{
+          friend['friendShipStatues'] = 0
+        }
+        this.friendList.unshift(friend)
+        console.log("check: " + ff)
+      }}
+      
     }else{
       this.friendList = []
     }
+    console.log("friends",this.friendList)
   }
   
+  async acceptFriendship(id){
+    await this.apiService.acceptFriendship(id)
+  }
 
 }

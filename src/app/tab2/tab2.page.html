@@ -54,7 +54,11 @@
           <h3 class="bold">{{friend['full_name']}}</h3>
           <p>{{friend['bio']}}</p>
         </ion-label>
-        <ion-button color="danger" (click)="addFriend(friend['id'])"  shape="round" slot="end">Add</ion-button>
+        <ion-button *ngIf="friend['friendShipStatues'] === 0 && !profile.friends.includes( friend.id)" color="danger" (click)="addFriend(friend['id'])"  shape="round" slot="end">Add</ion-button>
+        <ion-button *ngIf="friend['friendShipStatues'] === 1" color="danger"  shape="round" slot="end">Added</ion-button>
+        <ion-button *ngIf="friend['friendShipStatues'] === 2" color="danger" (click)="acceptFriend(friend['friendshipId'],'','')"  shape="round" slot="end">accept</ion-button>
+        <ion-button *ngIf="profile.friends.includes( friend.id)" color="danger"  shape="round" slot="end">visit</ion-button>
+
       </ion-item>
       </div>
 

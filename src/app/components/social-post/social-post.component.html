@@ -10,7 +10,7 @@
 
           <ion-text class="bold" color="danger-tint">{{post['profiles']['full_name']}}</ion-text>
         </h4>
-        <p>{{post['created_at'] }}</p>
+        <p>{{ timeAgo(post['created_at']) }}</p>
       </ion-label>
       <ion-buttons>
         <ion-button (click)="toggleReactionsPopup(post)" color="danger">
@@ -88,7 +88,7 @@
                       <ion-text color="light">{{post['caption']}}</ion-text>
                     </h2>
                     <p>
-                      <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">Slept for {{post['wakeup'] | date: 'H': 'UTC-3'}} hours and {{post['wakeup'] | date: 'mm': 'UTC-3'}} minutes</ion-text>
+                      <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">{{sleptFor(post.created_at)}}</ion-text>
                     </p>
                     <ion-chip color="medium">
                       <ion-icon color="light" name="moon"></ion-icon>
@@ -140,12 +140,12 @@
             <h2>{{FriendData['full_name']}}</h2>
             <p *ngIf="FriendData['bio']">{{FriendData['bio']}}</p>
           </ion-label>
-          <ion-button *ngIf="true" color="danger" routerLink="/edit-profile" style=" font-size:large;" size="small">
+          <ion-button *ngIf="!profile.friends.includes(FriendData['id'])" color="danger" routerLink="/edit-profile" style=" font-size:large;" size="small">
             <h3>add</h3> 
             <ion-icon  color="light" slot="end" name="add-circle-outline"></ion-icon>
                  
           </ion-button>
-          <ion-button *ngIf="false" color="danger" routerLink="/edit-profile" style="height: 35px; border-radius: 50%; font-size: medium;" size="small">
+          <ion-button *ngIf="profile.friends.includes(FriendData['id'])" color="danger" (click)="visitFriend(FriendData)" style="height: 35px; border-radius: 50%; font-size: medium;" size="small">
             visit 
                  
           </ion-button>
