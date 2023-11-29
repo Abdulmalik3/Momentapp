@@ -10,7 +10,7 @@
 
           <ion-text class="bold" color="danger-tint">{{post['profiles']['full_name']}}</ion-text>
         </h4>
-        <p>{{post['created_at']}}</p>
+        <p>{{post['created_at'] }}</p>
       </ion-label>
       <ion-buttons>
         <ion-button (click)="toggleReactionsPopup(post)" color="danger">
@@ -101,7 +101,7 @@
         <div class="peopleReacted">
           <ion-item lines="none" class="ion-no-padding">
             <!-- User reactions with their profile avatars -->
-            <ion-avatar *ngFor="let reaction of post['reactions']">
+            <ion-avatar *ngFor="let reaction of post['reactions']" (click)="openModal(reaction[0])" >
               <img class="userAvatar" [src]="getAvatarURL(reaction[0])">
               <img class="reaction" [src]="getReactionIcon(reaction[1])">
             </ion-avatar>
@@ -129,3 +129,28 @@
   </ion-card-content>
 </ion-card>
 
+
+<ion-modal [isOpen]="isOpen"  (willDismiss)="isOpentoFalse($event)" >
+  <ng-template>
+    <ion-content>
+      <div class="userContainer">
+      <div class="userInfo">
+        <img class="userAvatar2" src="{{FriendData['avatar_url']}}">
+          <ion-label>
+            <h2>{{FriendData['full_name']}}</h2>
+            <p *ngIf="FriendData['bio']">{{FriendData['bio']}}</p>
+          </ion-label>
+          <ion-button *ngIf="true" color="danger" routerLink="/edit-profile" style=" font-size:large;" size="small">
+            <h3>add</h3> 
+            <ion-icon  color="light" slot="end" name="add-circle-outline"></ion-icon>
+                 
+          </ion-button>
+          <ion-button *ngIf="false" color="danger" routerLink="/edit-profile" style="height: 35px; border-radius: 50%; font-size: medium;" size="small">
+            visit 
+                 
+          </ion-button>
+        </div> 
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { SocialPostComponent } from './social-post.component';
+import { DateAgoPipe } from 'src/app/pipes/date-ago.pipe';
 
 describe('SocialPostComponent', () => {
   let component: SocialPostComponent;

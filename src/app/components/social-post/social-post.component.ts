@@ -16,9 +16,15 @@ export class SocialPostComponent implements OnInit {
 
   Reaction: boolean;
   @ViewChild('popover') popover: any;
- profile: any;
+  @ViewChild('popover2') popover2: any;
+
+  profile: any;
  @Input() posts
  @Input() myId
+ isOpen = false
+ showUserProfile
+ FriendData
+
 
  
 
@@ -45,8 +51,7 @@ export class SocialPostComponent implements OnInit {
 
   ngOnInit() { 
     this.profile = this.apiService.profile
-    console.log('myId',this.myId)
-  }
+    console.log('myId',this.myId)  }
 
   getAvatarURL(id){
     return "http://qupalcyhiytufftknrzr.supabase.co/storage/v1/object/public/avatars/"+id
@@ -136,6 +141,45 @@ export class SocialPostComponent implements OnInit {
     await this.apiService.savePost(data);
   }
 
+
+
+  isOpentoFalse(e){
+    this.isOpen = false
+    this.FriendData = []
+  }
+
+  async openModal(id){
+    this.isOpen = true
+    this.FriendData = await this.apiService.getUserProfileById(id)
+  }
+
+  timeAgo(value){
+    var offset = new Date().getTimezoneOffset() * 1000;
+    //console.log("time zone is", offset)
+    if (!value) { return 'a long time ago'; }
+    let local = new Date(value)
+    let dateFromDatabase = Date.parse(value)
+   // console.log("time zone is", dateFromDatabase)
+    let dateNow = Date.now() 
+    let time = (dateNow - dateFromDatabase ) / 1000;
+    if (time < 10) {
+      return 'just now';
+    } else if (time < 60) {
+      return 'a moment ago';
+    }
+    const divider = [60, 60, 24, 30, 12];
+    const string = [' second', ' minute', ' hour', ' day', ' month', ' year'];
+    let i;
+    for (i = 0; Math.floor(time / divider[i]) > 0; i++) {
+      time /= divider[i];
+    }
+    const plural = Math.floor(time) > 1 ? 's' : '';
+    return Math.floor(time) + string[i] + plural + ' ago';
+  }
+
+
+
 }
+
 
 

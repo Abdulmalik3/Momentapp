@@ -119,7 +119,7 @@ export class Tab1Page {
       if(payload.eventType == "INSERT"){
 
        let newpost = await this.apiService.supabase.from("posts")
-       .select("*, profiles(full_name, avatar_url)")
+       .select("*, profiles(id,full_name, avatar_url)")
        .eq("id",newdata['id'])
        .single()
 
