@@ -52,20 +52,17 @@
 
 <div *ngIf="showNightPost" class="popupModal">
   <div class="innerDiv" style="height: auto;">
-    <div  class="upperLayer" style="color:#4D00FF" >
-      <div class="ion-text-center ion-padding-top ion-margin-top">
-        <h2 class="bold ion-padding-top">
-          <ion-text style="color:#4D00FF">Sweet dreams</ion-text>
+    <div  class="upperLayer"  >
+      <div class="ion-text-center ion-padding-top ion-margin-top ">
+        <h2 class="bold">
+          <ion-text color='danger' >Sweet dreams</ion-text>
         </h2>
         <p>
-          <ion-text style="color:rgb(201, 201, 201)">It's 9:00 PM</ion-text>
+          <ion-text style="color:rgb(68, 68, 68)">It's 9:00 PM</ion-text>
         </p>
-        <ion-chip color="medium">
-          
-          <ion-text color="light" class="bold">Send over a night post</ion-text>
-        </ion-chip>
+
         <div class="ion-text-center">
-          <ion-button (click)="saveSleepPost()" style="color:#4D00FF">
+          <ion-button color='danger' (click)="saveSleepPost()" style="color:#4D00FF">
             Sleep  
             <ion-icon color="light" name="moon"></ion-icon></ion-button>
         </div>

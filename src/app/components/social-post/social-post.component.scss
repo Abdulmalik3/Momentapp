@@ -263,11 +263,41 @@ ion-modal {
   text-align: center;
 }
   .userAvatar2 {
-    height: 60px !important;
-    width: 60px !important;
+    height: 100px !important;
+    width: 100px !important;
     border-radius: 50%;
     margin: auto;
+    border: 2px solid #eb445a;
     
 
+}
+.goodnight{
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    border: #eb445a solid;
+    z-index: 1;
+}
+.dot {
+    position: fixed;
+
+    height: 60px;
+    width: 60px;
+
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    align-items: center;
+    text-align: center;
+    z-index:2;
+  }
+.insidDot{
+
+    height: 60px !important;
+    width: 60px !important;
 }
  

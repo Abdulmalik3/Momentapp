@@ -54,7 +54,9 @@ export class SocialPostComponent implements OnInit {
 
   ngOnInit() { 
     this.profile = this.apiService.profile
-    console.log('myId',this.myId)  }
+    console.log('myId',this.myId) 
+    this.randomPosition()
+  }
 
   getAvatarURL(id){
     return "http://qupalcyhiytufftknrzr.supabase.co/storage/v1/object/public/avatars/"+id
@@ -140,20 +142,43 @@ export class SocialPostComponent implements OnInit {
     }
 
 
-
     await this.apiService.savePost(data);
   }
 
+  randomPosition(sheeps = 1){
+    let angle = this.getRandomInt(6)
+    
+    var  theta = Math.PI / angle
+    console.log(theta)
+    var radius = 30;
+    var mainHeight = 55
+    var colors = ['red', 'green', 'purple', 'black', 'orange', 'yellow', 'maroon', 'grey', 'lightblue', 'tomato', 'pink', 'maroon', 'cyan', 'magenta', 'blue', 'chocolate', 'DarkSlateBlue'];
 
+  
+      let xPos = Math.round(radius * (Math.cos(theta))) + 'px';
+      let yPos = Math.round(radius * (Math.sin(theta))) + 'px';
+      let position = "absolute";
+      let topPos = ((mainHeight / 2) - parseInt(xPos)) + 'px';
+      let leftPos = ((mainHeight / 2) + parseInt(yPos)) + 'px';
+      let backgroundColor = colors[1];
+      let style =  "position:" +position + '; top:'+ topPos + "; left: " + leftPos + "; z-index:3;"
+
+      console.log(style)
+      return style
+    }
+  
+  getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
 
   isOpentoFalse(e){
     this.isOpen = false
-    this.FriendData = []
+
   }
 
   async openModal(id){
-    this.isOpen = true
     this.FriendData = await this.apiService.getUserProfileById(id)
+    this.isOpen = true
     //if(this.profile.friends.includes)
 
   }

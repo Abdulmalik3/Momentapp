@@ -1,7 +1,7 @@
 <ion-card *ngFor="let post of posts " class="ion-no-margin ion-margin-bottom">
   <ion-card-content class="ion-no-margin ion-no-padding">
     <ion-item class="pb-0" lines="none">
-      <ion-avatar class="avatar" slot="start">
+      <ion-avatar (click)="openModal(post['authorId'])" class="avatar" slot="start">
         <img src="{{post['profiles']['avatar_url']}}" >
       </ion-avatar>
       <ion-label>
@@ -60,6 +60,12 @@
         background-size:cover;
         background-position: center;" >
         <div style="height: 110px;"></div>
+          <div class="goodnight">
+              <span class="dot" color="medium" >
+                <ion-icon class="insidDot" color="light" name="moon"></ion-icon>
+              </span>
+          </div>
+
           <div class="ion-text-center ion-padding-top ion-margin-top">
             <h2 class="bold ion-padding-top">
               <ion-text color="light">{{post['caption']}}</ion-text>
@@ -67,10 +73,7 @@
             <p>
               <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">Sleeping since {{post['created_at'] | date: 'shortTime'}}</ion-text>
             </p>
-            <ion-chip color="medium">
-              <ion-icon color="light" name="moon"></ion-icon>
-              <ion-text color="light" class="bold">Send over a night post</ion-text>
-            </ion-chip>
+
             <div class="ion-text-center" *ngIf="post['authorId'] === myId">
               <ion-button color="secondary" (click)="saveWakeupPost(post['created_at'])">Wake Up</ion-button>
             </div>
@@ -94,7 +97,7 @@
                       <ion-icon color="light" name="moon"></ion-icon>
                       <ion-text color="light" class="bold">Say Hi!</ion-text>
                     </ion-chip>
-                    d
+                    
                   </div>
                 </div>
 
@@ -135,9 +138,11 @@
     <ion-content>
       <div class="userContainer">
       <div class="userInfo">
-        <img class="userAvatar2" src="{{FriendData['avatar_url']}}">
+        <ion-avatar  class="userAvatar2" >
+        <img  src="{{FriendData['avatar_url']}}">
+        </ion-avatar>
           <ion-label>
-            <h2>{{FriendData['full_name']}}</h2>
+            <p class="bold" style="font-size: x-large; color: black;">{{FriendData['full_name']}}</p>
             <p *ngIf="FriendData['bio']">{{FriendData['bio']}}</p>
           </ion-label>
           <ion-button *ngIf="!profile.friends.includes(FriendData['id'])" color="danger" routerLink="/edit-profile" style=" font-size:large;" size="small">

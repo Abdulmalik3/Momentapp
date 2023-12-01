@@ -5,7 +5,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PhotoViewer } from '@awesome-cordova-plugins/photo-viewer/ngx';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 @NgModule({
   declarations: [AppComponent, DateAgoPipe],
