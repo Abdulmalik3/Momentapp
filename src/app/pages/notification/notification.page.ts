@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { DataHelperService } from 'src/app/shared/data-helper.service';
-import { iNotification } from 'src/app/shared/models';
 
 @Component({
   selector: 'app-notification',
@@ -23,6 +22,7 @@ export class NotificationPage implements OnInit {
   async ngOnInit() {
 
     this.notificationList = await this.apiService.getAllUserNotifications()
+    await localStorage.setItem('newNotifications', 'false')
     
   }
 

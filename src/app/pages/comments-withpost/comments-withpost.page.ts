@@ -31,6 +31,7 @@ export class CommentsWithpostPage implements OnInit {
     console.log("post from comeents page", this.post)
     await this.getComment()
     console.log(this.commentList)
+    this.notifyerId = this.post.authorId
 
 
   }
@@ -39,9 +40,12 @@ export class CommentsWithpostPage implements OnInit {
       content: this.comment,
       postId: this.postId
     }
-
+    let firstComment = null
+    if(this.post['first_comment'] != null){
+      firstComment = true
+    }
     console.log(data)
-    await this.apiService.saveComment(data,this.notifyerId)
+    await this.apiService.saveComment(data,this.notifyerId,firstComment)
     this.ngOnInit()
   }
 
@@ -77,6 +81,45 @@ getReactionIcon(reaction: string): string {
       return "../../../assets/images/sad.png"
     break
   }
+}
+
+timeAgo(value){
+ 
+  if (!value) { return 'a long time ago'; }
+  let time = (Date.now() - value) / 1000;
+  if (time < 10) {
+    return 'just now';
+  } else if (time < 60) {
+    return 'a moment ago';
+  }
+  const divider = [60, 60, 24, 30, 12];
+  const string = [' second', ' minute', ' hour', ' day', ' month', ' year'];
+  let i;
+  for (i = 0; Math.floor(time / divider[i]) > 0; i++) {
+    time /= divider[i];
+  }
+  const plural = Math.floor(time) > 1 ? 's' : '';
+  return Math.floor(time) + string[i] + plural + ' ago';
+
+}
+
+
+sleptFor(value){
+
+  if (!value) { return 'a long time ago'; }
+  let time = value / 1000;
+   if (time < 60) {
+    return 'less than a minute';
+  }
+  const divider = [60, 60, 24, 30, 12];
+  const string = [' second', ' minute', ' hour', ' day', ' month', ' year'];
+  let i;
+  for (i = 0; Math.floor(time / divider[i]) > 0; i++) {
+    time /= divider[i];
+  }
+  const plural = Math.floor(time) > 1 ? 's' : '';
+  return "Slept for " + Math.floor(time) + string[i] + plural ;
+
 }
 
 

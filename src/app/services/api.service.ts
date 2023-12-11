@@ -37,12 +37,8 @@ export class ApiService {
         }})
         
         this.loadUser()
-        this.getUserProfile()
         this.checkNontifications()
 
-
-        this.members = this.bringMemebers().then(data=> {return data})
-        console.log("Supabase constructor | members", this.members)
 
 }
 
@@ -54,6 +50,7 @@ async loadUser() {
     const data = await this.supabase.auth.getUser();
     if(data.data.user){
       this.currentUser.next(data.data.user)
+      await this.getUserProfile()
       console.log("User:" ,data.data.user.id)
   }else{
     this.currentUser.next(false)
@@ -248,7 +245,7 @@ async loadUser() {
   async getPost(id: string) {
     var data = await this.supabase
       .from('posts')
-      .select('*, profiles(id,full_name, avatar_url)')
+      .select('*, profiles(id,full_name, avatar_url),comments(*,profile(id,full_name,avatar_url))')
       .eq('authorId', id)
       .order('created_at', { ascending: true })
       
@@ -285,7 +282,7 @@ async loadUser() {
   
     const { data: initialData, error } = await this.supabase
       .from('posts')
-      .select('*, profiles(id,full_name, avatar_url)')
+      .select('*, profiles(id,full_name, avatar_url),comments:first_comment(*,profiles:userId (*))')
       .in('authorId', friends)
       .order('created_at', { ascending: false })
 
@@ -364,9 +361,9 @@ async loadUser() {
     }
   }
 
-  async saveComment(comment,notifyerId) {
+  async saveComment(comment,notifyerId ,firstComment) {
     await this.loadCtr.create({
-      message: 'Saving post...'
+      message: 'Saving comment...'
     }).then(loading => loading.present())
     comment.created_at = Date.now()
 
@@ -374,9 +371,27 @@ async loadUser() {
     const { data, error } = await this.supabase.
                             from('comments')
                             .insert(comment)
+                            .select()
+
+            console.log("Comment created successfully1:", data)
+  
           if (!error){
-            this.makeNotification(this.profile.id, comment.postId ,1,notifyerId)
+            await this.makeNotification(this.profile.id, comment.postId ,1,notifyerId)
+            
+              if(data){
+
+                console.log(" comment id= ",data[0]['id'])
+
+                if(firstComment === null){
+                  console.log("updating post...")
+                let post1 = await this.supabase.from('posts').update({first_comment: data[0]['id']}).eq('id', comment.postId).select()
+                console.log("updated post...", post1)
+              }}
+              
+            
           }
+
+
     this.loadCtr.dismiss()
 
     if (error) {
@@ -523,6 +538,11 @@ async bringFriendshipRequests(){
   //notifications
 
   async makeNotification(actorID, actedOn, typeId, notifyerId){
+
+    if(notifyerId === actorID){
+      console.log('thats meee')
+      return false
+    }
     /*
     typeId: 
     1: commented on your post 
@@ -547,7 +567,7 @@ async bringFriendshipRequests(){
 
     let {data,error} = await this.supabase.from('notifications')
     .insert(notification)
-    console.log("notification",notification, error)
+    console.log("notification",notification, error, "n data: ", data)
   }
 
   async getAllUserNotifications(conditions = ''){
@@ -556,19 +576,16 @@ async bringFriendshipRequests(){
       .from('notifications')
       .select('*,profiles(full_name,avatar_url)')
       .eq('notifyer_id',this.profile.id)
-      .order('created_at', { ascending: false })
       .limit(12)
+      .order('id', { ascending: false })
 
-
-
-
-
+      //.order('created_at', { ascending: true })
 
       if(error){
         console.log(error)
         return false
       }
-      let lastNotification = data[data.length -1]['id']
+      let lastNotification = data[0]['id']
       console.log(lastNotification)
       await localStorage.setItem('lastNotification', lastNotification)
       return data
@@ -579,6 +596,11 @@ async bringFriendshipRequests(){
     //need to be more efficient
   async checkNontifications(){
     let lastNotification = Number(await localStorage.getItem('lastNotification')) 
+    let newNotification = await localStorage.getItem('newNotifications')
+
+    if(newNotification === 'true'){
+      return false
+    }else{
     console.log('last notification id =' ,Number(lastNotification))
     if(!lastNotification){
       await localStorage.setItem('newNotifications', 'false')
@@ -590,17 +612,24 @@ async bringFriendshipRequests(){
     .select('id')
     .eq('notifyer_id',this.profile.id)
     .gt('id', lastNotification)
+    .order('created_at', { ascending: false })
 
 
     console.log('last notification data ' ,data.data)
 
     if(data.data.length > 0 ){
-      console.log('there is a new notification')
+      console.log('there is a new notification', data.data)
       await localStorage.setItem('newNotifications', 'true')
+
+      let lastNotification = data.data[data.data.length -1]['id']
+      console.log("last notification from checkNontifications:",lastNotification)
+      await localStorage.setItem('lastNotification', lastNotification)
     }else{
       console.log('there is no new notification')
       await localStorage.setItem('newNotifications', 'false')
-    }
+    }}
+
+
   }
 
 

@@ -5,6 +5,7 @@ import { iPost } from '../shared/models';
 import { ApiService } from '../services/api.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { IonModal } from '@ionic/angular';
 
 
 @Component({
@@ -15,13 +16,15 @@ import { filter } from 'rxjs/operators';
 export class Tab1Page {
 
   @ViewChild('popover') popover: any;
+  @ViewChild(IonModal) modal: IonModal;
+
 
   showNightPost: boolean;
   profile
   isOpen = false;
   allPosts
   userId
-  newNotification 
+  newNotification = 'false'
 
 
   constructor(
@@ -55,7 +58,7 @@ export class Tab1Page {
         this.updateFeeds()
         this.apiService.checkNontifications()
         this.connectTorealtime();
-        this.newNotification =  localStorage.getItem('newNotifications')
+        this.newNotification = localStorage.getItem('newNotifications')
       }
     });
 
@@ -69,10 +72,7 @@ export class Tab1Page {
     }, 2000);
   }
 
-  presentPopover(e: Event) {
-    this.popover.event = e;
-    this.isOpen = true;
-  }
+
   async saveSleepPost(){
 
 
@@ -85,7 +85,7 @@ export class Tab1Page {
     }
 
     await this.apiService.savePost(data);
-    this.showNightPost = false
+    this.isOpen = false
   }
 
    updateFeeds(){
@@ -119,7 +119,7 @@ export class Tab1Page {
       if(payload.eventType == "INSERT"){
 
        let newpost = await this.apiService.supabase.from("posts")
-       .select("*, profiles(id,full_name, avatar_url)")
+       .select("*, profiles(id,full_name, avatar_url),comments:first_comment(*)")
        .eq("id",newdata['id'])
        .single()
 
@@ -137,11 +137,16 @@ export class Tab1Page {
       
         if (index !== -1) {
           let updatedPost = await this.apiService.supabase.from("posts")
-       .select("*, profiles(full_name, avatar_url)")
-       .eq("id",newdata['id'])
-       .single()
-          // Update the specific object in your local array with the new data
-          this.allPosts[index] = updatedPost.data;
+          this.allPosts[index]['reactions'] =  payload.new['reactions'];
+          if(payload.new['first_comment'] != null){
+            let firstComment = await this.apiService.supabase.from("comments")
+              .select("content,profiles(full_name)")
+              .eq("id",payload.new['first_comment'])
+              .single()
+              this.allPosts[index]['comments'] = firstComment.data
+          }
+          console.log("updated post from database :", newdata, this.allPosts)
+
       
           // You can also trigger any UI updates or other logic here
         }
@@ -151,6 +156,17 @@ export class Tab1Page {
     console.log(res)
   })
 
+  }
+  async openModal(){
+   
+    this.isOpen = true
+    //if(this.profile.friends.includes)
+
+  }
+  isOpentoFalse(e){
+    this.isOpen = false
+
+  
   }
   
 

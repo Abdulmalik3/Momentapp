@@ -55,7 +55,6 @@ export class SocialPostComponent implements OnInit {
   ngOnInit() { 
     this.profile = this.apiService.profile
     console.log('myId',this.myId) 
-    this.randomPosition()
   }
 
   getAvatarURL(id){
@@ -111,14 +110,18 @@ export class SocialPostComponent implements OnInit {
     await this.apiService.reactToPost(postId,reactionType,typeId)
 
   }
-  async openCommentsModal(postId,notifyerId) {
+  async openCommentsModal(postId,notifyerId,firstComment) {
+    let commentList = await this.apiService.getComments(postId)
+
     const modal = await this.modalCtrl.create({
       breakpoints: [0.5, 0.5, 0.5, 1],
       initialBreakpoint: 0.8,
       component: CommentPage,
       componentProps:{
+        commentList: commentList,
         postId: postId,
-        notifyerId: notifyerId
+        notifyerId: notifyerId,
+        firstComment: firstComment
       },
       cssClass: "modal-hight"
       
@@ -202,11 +205,12 @@ export class SocialPostComponent implements OnInit {
     return Math.floor(time) + string[i] + plural + ' ago';
 
   }
+  
+  
   sleptFor(value){
  
     if (!value) { return 'a long time ago'; }
-    let time = (Date.now() - value) / 1000;
-
+    let time = value / 1000;
      if (time < 60) {
       return 'less than a minute';
     }
@@ -230,6 +234,8 @@ export class SocialPostComponent implements OnInit {
     this.navCtrl.navigateForward('/friend-profile')
 
   }
+
+
 
 }
 

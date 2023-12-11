@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './services/api.service';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
 
 @Component({
   selector: 'app-root',
@@ -11,6 +13,8 @@ export class AppComponent implements OnInit{
   }
   async ngOnInit(){
     await this.apiService.getUserProfile()
+    defineCustomElements(window);
+
 
 
   }

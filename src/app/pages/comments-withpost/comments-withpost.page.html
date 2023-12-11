@@ -64,7 +64,7 @@
                     <ion-text color="light">{{post['caption']}}</ion-text>
                   </h2>
                   <p>
-                    <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">Slept for {{post['wakeup'] | date: 'H': 'UTC-3'}} hours and {{post['wakeup'] | date: 'mm': 'UTC-3'}} minutes</ion-text>
+                    <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">Slept for {{sleptFor(post['wakeup'])}}</ion-text>
                   </p>
                   <ion-chip color="medium">
                     <ion-icon color="light" name="moon"></ion-icon>

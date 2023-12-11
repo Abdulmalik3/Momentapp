@@ -60,11 +60,6 @@
         background-size:cover;
         background-position: center;" >
         <div style="height: 110px;"></div>
-          <div class="goodnight">
-              <span class="dot" color="medium" >
-                <ion-icon class="insidDot" color="light" name="moon"></ion-icon>
-              </span>
-          </div>
 
           <div class="ion-text-center ion-padding-top ion-margin-top">
             <h2 class="bold ion-padding-top">
@@ -91,7 +86,7 @@
                       <ion-text color="light">{{post['caption']}}</ion-text>
                     </h2>
                     <p>
-                      <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">{{sleptFor(post.created_at)}}</ion-text>
+                      <ion-text style="color:rgb(201, 201, 201); background-color: antiquewhite; background-color: rgba(128, 128, 128, 0.5);font-size: 17px;border-radius:25px">{{sleptFor(post.wakeup)}}</ion-text>
                     </p>
                     <ion-chip color="medium">
                       <ion-icon color="light" name="moon"></ion-icon>
@@ -111,7 +106,7 @@
 
             <!-- Comment button to open comments and textbox for a user to write comment -->
             <ion-buttons class="commentButton" slot="end">
-              <ion-button (click)="openCommentsModal(post['id'],post['authorId'])" color="dark" shape="round">
+              <ion-button (click)="openCommentsModal(post['id'],post['authorId'],post['first_comment'])" color="dark" shape="round">
                 <ion-icon color="dark" name="chatbubble-ellipses-outline"></ion-icon>
               </ion-button>
             </ion-buttons>
@@ -119,11 +114,11 @@
         </div>
 
         <!-- Shows most recent comment at bottom -->
-        <ion-item class="ion-no-padding" lines="none">
+        <ion-item *ngIf="post['comments']" class="ion-no-padding" lines="none">
           <p>
-            <ion-text class="bold" color="dark">Davidson
+            <ion-text class="bold" color="dark">{{post['comments']['profiles']['full_name']}}
             </ion-text>
-            <ion-text color="medium">Lorem ipsum is a dummy text.</ion-text>
+            <ion-text color="medium">{{post['comments']['content']}}</ion-text>
           </p>
         </ion-item>
       </ion-card-content>
@@ -145,7 +140,7 @@
             <p class="bold" style="font-size: x-large; color: black;">{{FriendData['full_name']}}</p>
             <p *ngIf="FriendData['bio']">{{FriendData['bio']}}</p>
           </ion-label>
-          <ion-button *ngIf="!profile.friends.includes(FriendData['id'])" color="danger" routerLink="/edit-profile" style=" font-size:large;" size="small">
+          <ion-button *ngIf="!profile.friends.includes(FriendData['id'])" color="danger"  style=" font-size:large;" size="small">
             <h3>add</h3> 
             <ion-icon  color="light" slot="end" name="add-circle-outline"></ion-icon>
                  

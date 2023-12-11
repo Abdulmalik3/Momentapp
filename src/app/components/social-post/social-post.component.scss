@@ -231,6 +231,7 @@ ion-grid {
 ion-modal {
     --height: 280px;
     --border-radius: 16px;
+
     --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
   
@@ -252,7 +253,7 @@ ion-modal {
     padding: 10px;
   }
   .userInfo{
-    width: 200px;
+    width: auto;
   height: auto;
   /* Center vertically and horizontally */
   position: absolute;
@@ -301,3 +302,27 @@ ion-modal {
     width: 60px !important;
 }
  
+ion-button[shape=circle] {
+    --border-radius: 50%;
+
+    
+}
+
+
+user-modal{
+    .modal-wrapper {
+        position: absolute;
+        bottom: 0;
+        min-height: initial;
+        top: initial;
+        height: 50%;
+        --border-radius: 16px;
+        --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+}
+  
+user-modal::part(backdrop) {
+    background: rgba(209, 213, 219);
+    opacity: 1;
+  }
+  

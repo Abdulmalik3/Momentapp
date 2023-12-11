@@ -43,30 +43,35 @@
         <ion-icon routerLink="/post" name="image"></ion-icon>
       </ion-fab-button>
       <ion-fab-button color="success">
-        <ion-icon (click)="showNightPost = true" name="moon"></ion-icon>
+        <ion-icon (click)="openModal()" name="moon"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
 
 </ion-content>
 
-<div *ngIf="showNightPost" class="popupModal">
-  <div class="innerDiv" style="height: auto;">
-    <div  class="upperLayer"  >
-      <div class="ion-text-center ion-padding-top ion-margin-top ">
-        <h2 class="bold">
-          <ion-text color='danger' >Sweet dreams</ion-text>
-        </h2>
-        <p>
-          <ion-text style="color:rgb(68, 68, 68)">It's 9:00 PM</ion-text>
-        </p>
+<ion-modal [isOpen]="isOpen"  (willDismiss)="isOpentoFalse($event)" >
+  <ng-template>
 
-        <div class="ion-text-center">
-          <ion-button color='danger' (click)="saveSleepPost()" style="color:#4D00FF">
-            Sleep  
-            <ion-icon color="light" name="moon"></ion-icon></ion-button>
+    <div>
+      <div class="innerDiv" style="height: auto;">
+        <div  class="upperLayer"  >
+          <div class="ion-text-center ion-padding-top ion-margin-top ">
+            <h2 class="bold">
+              <ion-text color='danger' >Sweet dreams</ion-text>
+            </h2>
+            <p>
+              <ion-text style="color:rgb(68, 68, 68)">It's 9:00 PM</ion-text>
+            </p>
+    
+            <div class="ion-text-center">
+              <ion-button color='danger' (click)="saveSleepPost()" style="color:#4D00FF">
+                Sleep  
+                <ion-icon color="light" name="moon"></ion-icon></ion-button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </ng-template>
+</ion-modal>

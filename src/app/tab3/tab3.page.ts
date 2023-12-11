@@ -38,7 +38,7 @@ export class Tab3Page implements OnInit {
     private apiService: ApiService,
     private navCtrl: NavController
   ) {
-    this.allPosts = this.dataHelper.allPosts;
+    this.updateFeeds()
     this.profile =  this.apiService.profile;
     
   }
@@ -94,4 +94,7 @@ export class Tab3Page implements OnInit {
     }
   }
 
+  updateFeeds(){
+    this.apiService.getFeed().then(data=> this.allPosts = data)
+  }
 }

@@ -7,19 +7,19 @@ import { ApiService } from 'src/app/services/api.service';
   styleUrls: ['./comment.page.scss'],
 })
 export class CommentPage implements OnInit {
+  profile =  this.apiService.profile
   presentingElement
   comment
   postId
   commentList
   notifyerId 
-  profile
+  firstComment
   constructor(private apiService: ApiService) { }
 
   async ngOnInit() {
-    this.commentList = await this.apiService.getComments(this.postId)
-    console.log(this.commentList)
 
-    this.profile = this.apiService.profile
+    console.log("first comment",this.firstComment)
+
 
   }
   async addComment(){
@@ -29,8 +29,15 @@ export class CommentPage implements OnInit {
     }
 
     console.log(data)
-    await this.apiService.saveComment(data,this.notifyerId)
-    this.ngOnInit()
+    if(!this.firstComment){
+      this.firstComment = null
+      console.log('no comments')
+    }else{
+      this.firstComment = true
+      console.log('There is comments')
+    }
+    await this.apiService.saveComment(data,this.notifyerId, this.firstComment)
+    this.commentList = await this.apiService.getComments(this.postId)
   }
 
   

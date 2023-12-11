@@ -45,10 +45,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/new-chat/new-chat.module').then( m => m.NewChatPageModule)
   },
   {
-    path: 'night-post',
-    loadChildren: () => import('./pages/night-post/night-post.module').then( m => m.NightPostPageModule)
-  },
-  {
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
   },
