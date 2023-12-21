@@ -39,11 +39,11 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="primary">
-        <ion-icon routerLink="/post" name="image"></ion-icon>
+      <ion-fab-button (click)="openPostModal()" color="primary">
+        <ion-icon  name="image"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button color="success">
-        <ion-icon (click)="openModal()" name="moon"></ion-icon>
+      <ion-fab-button (click)="openModal()"  color="success">
+        <ion-icon name="moon"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
@@ -51,7 +51,7 @@
 </ion-content>
 
 <ion-modal [isOpen]="isOpen"  (willDismiss)="isOpentoFalse($event)" >
-  <ng-template>
+  <ng-template >
 
     <div>
       <div class="innerDiv" style="height: auto;">

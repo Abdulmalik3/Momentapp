@@ -83,15 +83,21 @@ async loadUser() {
       console.log(error)
       return error
     }
+
+    const { data: avt , error: avtError } = await this.supabase.storage
+      .from('avatars')
+      .copy('mainAvt', new_id)
     var data2 = await this.supabase.from('profiles')
     .update([
       { full_name: name ,
-       avatar_url: 'https://gcavocats.ca/wp-content/uploads/2018/09/man-avatar-icon-flat-vector-19152370-1.jpg' ,
+       avatar_url: 'https://qupalcyhiytufftknrzr.supabase.co/storage/v1/object/public/avatars/'+ new_id ,
        friends: [new_id] },
     ])
     .eq("id", new_id )
     .select()
     console.log("sing up data:", data2)
+
+    this.router.navigateByUrl('/') 
 
     
 
@@ -122,6 +128,7 @@ async loadUser() {
       console.log(error)
       return error
     }
+     localStorage.clear()
     this.router.navigateByUrl('/', {replaceUrl: true})
   }
   //reset user's password
@@ -242,10 +249,10 @@ async loadUser() {
     return data
   }
 
-  async getPost(id: string) {
+  async getPosts(id: string) {
     var data = await this.supabase
       .from('posts')
-      .select('*, profiles(id,full_name, avatar_url),comments(*,profile(id,full_name,avatar_url))')
+      .select('*, profiles(id,full_name, avatar_url),comments:first_comment(*,profiles:userId(*))')
       .eq('authorId', id)
       .order('created_at', { ascending: true })
       
@@ -258,7 +265,7 @@ async loadUser() {
 
   //get user's posts and friends posts and listen for changes
 
-  async getFeed() {
+  async getFeed(id = 1) {
     let friends
     if(this.profile){
       friends = this.profile.friends
@@ -658,5 +665,22 @@ async bringFriendshipRequests(){
 
 
   }
+
+  async uploadPostImg(filePath: string, file: File) {
+    let filePath2 = filePath+"/"+ this.randomString(25)
+    const {data,error} = await this.supabase.storage.from('posts').upload(filePath2, file ,{cacheControl: '3',upsert: true})
+    console.log(data,error)
+    const url = await this.supabase.storage.from('posts').getPublicUrl(filePath2)
+    return url.data.publicUrl
+
+
+  }
+
+   randomString(length) {
+    let chars = "'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+}
 
 }

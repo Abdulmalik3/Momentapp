@@ -23,15 +23,16 @@
     <ion-textarea rows="4" [(ngModel)]="caption" type="text" placeholder="What's in your mind , {{profile['full_name'] }}"></ion-textarea>
   </ion-item>
 
-  <ion-card class="ion-no-margin ion-margin-top">
+  <ion-card  class="ion-no-margin ion-margin-top">
     <ion-card-content>
-      <div class="ion-text-center ion-margin-top ion-margin-bottom">
+      <div *ngIf="!postPhoto" (click)="bringImgToView()" class="ion-text-center ion-margin-top ion-margin-bottom">
         <ion-icon size="large" color="dark" name="images"></ion-icon>
         <h2 class="ion-no-margin bold">
           <ion-text color="dark">Add photos</ion-text>
         </h2>
         <p class="ion-no-margin">or drag and drop</p>
       </div>
+      <img  *ngIf="postPhoto" style="border-radius: 12px;" [src]='postPhoto.dataUrl'>
     </ion-card-content>
   </ion-card>
 

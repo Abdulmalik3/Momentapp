@@ -17,14 +17,17 @@ export class LoginPage implements OnInit {
   password: ['', Validators.required]
 
 })
+
 signupForm = this.fb.nonNullable.group({
-  semail: ['', Validators.required],
+  semail: ['', Validators.required, Validators.email ],
   spassword: ['', Validators.required],
   cpassword: ['', Validators.required],
   name : ['', Validators.required]
 
 
 })
+
+passwordMatches
 
   
 
@@ -34,11 +37,9 @@ signupForm = this.fb.nonNullable.group({
     private alertCtrl: AlertController,
     private router: Router ) { 
 
-      apiService.getCurrentUser().subscribe((user) => {
-        if (user) {
-          this.router.navigateByUrl('/tabs/tab1')
-        }})}
-
+      
+}
+        
     get email() {
       return this.loginForm.controls.email;
     }
@@ -57,7 +58,7 @@ signupForm = this.fb.nonNullable.group({
     get name() {
       return this.signupForm.controls.name;
     }
-
+  
   ngOnInit() {
 
   }
@@ -72,6 +73,16 @@ signupForm = this.fb.nonNullable.group({
     const { semail, spassword , name} = this.signupForm.value
     console.log("name",name)
     const data = await this.apiService.signUp(semail, spassword, name)
+
+  }
+
+  passwordMatch(event){
+    let {spassword , cpassword} = this.signupForm.value
+    if( spassword != cpassword ){
+      this.passwordMatches = true
+    }else{
+      this.passwordMatches = false
+      }
 
   }
 }

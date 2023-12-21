@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { PhotoViewer } from '@awesome-cordova-plugins/photo-viewer/ngx';
-import { DataHelperService } from '../shared/data-helper.service';
-import { iPost } from '../shared/models';
 import { ApiService } from '../services/api.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { IonModal } from '@ionic/angular';
+import { IonModal, ModalController } from '@ionic/angular';
+import { PostPage } from '../pages/post/post.page';
 
 
 @Component({
@@ -28,37 +27,44 @@ export class Tab1Page {
 
 
   constructor(
-    private dataHelper: DataHelperService,
     public photo: PhotoViewer,
     private apiService: ApiService,
     private router: Router,
-     private route: ActivatedRoute
+     private  modalCtrl: ModalController
   ) {
     //this.allPosts = this.apiService.getPosts()
     apiService.getUserProfile()
     this.profile = this.apiService.profile
-    this.updateFeeds()
     this.userId = this.profile.id
     
   }
 
   async ngOnInit() {
     this.newNotification = await localStorage.getItem('newNotifications')
-
+    this.apiService.getUserProfile()
+    this.profile = this.apiService.profile
+    this.updateFeeds()
     this.connectTorealtime()
-    
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       // Check if the navigation is to the desired tab (e.g., '/tab1')
       console.log("router:",event.urlAfterRedirects)
       if (event.urlAfterRedirects === '/tabs/tab1') {
-         this.apiService.getUserProfile()
         // Call your function here
-        this.updateFeeds()
         this.apiService.checkNontifications()
-        this.connectTorealtime();
         this.newNotification = localStorage.getItem('newNotifications')
+        let isThereNewFriend = localStorage.getItem('newFriend')
+        if(isThereNewFriend === 'true'){
+          this.updateFeeds()
+
+          this.connectTorealtime()
+          localStorage.setItem('newFriend','false')
+
+        }
+      }else{
+        this.apiService.checkNontifications()
       }
     });
 
@@ -89,7 +95,9 @@ export class Tab1Page {
   }
 
    updateFeeds(){
+
     this.apiService.getFeed().then(data=> this.allPosts = data)
+    
   }
   
   async connectTorealtime(){
@@ -97,19 +105,19 @@ export class Tab1Page {
     const user = await this.apiService.supabase.auth.getUser();
   
     // Bring friend's ids from the friends column in the profiles table
-    const { data: profile, error: profilesError } = await this.apiService.supabase
-      .from('profiles')
-      .select('friends')
-      .eq('id', user.data.user.id)
-      .single();
+    // const { data: profile, error: profilesError } = await this.apiService.supabase
+    //   .from('profiles')
+    //   .select('friends')
+    //   .eq('id', user.data.user.id)
+    //   .single();
 
-    console.log("this.profile['friends']::: ", profile['friends'].toString())
+    console.log("this.profile['friends']::: ", this.profile['friends'].toString())
     this.apiService.supabase.channel('schema-db-changes').on('postgres_changes',
     {
       event: '*',
       schema: 'public',
       table: "posts",
-      filter: 'authorId=in.('+profile['friends'].toString()+')'
+      filter: 'authorId=in.('+this.profile['friends'].toString()+')'
       
     },
     async (payload) => {
@@ -168,6 +176,18 @@ export class Tab1Page {
 
   
   }
+
+  async openPostModal() {
+
+    const modal = await this.modalCtrl.create({
+      breakpoints: [0.5, 0.5, 0.5, 1],
+      initialBreakpoint: 0.8,
+      component: PostPage,
+      
+      
+    });
+    modal.present()
   
 
+}
 }

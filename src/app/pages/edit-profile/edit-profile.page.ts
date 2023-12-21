@@ -2,7 +2,6 @@ import { Component, OnInit, Output } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { Camera, CameraResultType } from '@capacitor/camera'
-import { EventEmitter } from 'stream';
 
 
 
@@ -18,8 +17,7 @@ export class EditProfilePage implements OnInit {
   dob: Date =this.apiService.profile.dob
   gender: string= this.apiService.profile.gender
   bio: string = this.apiService.profile.bio
-
-
+  randomDate = ''
 
 
 
@@ -49,7 +47,7 @@ export class EditProfilePage implements OnInit {
   }
 
   ngOnInit() {
-
+    this.randomDate = Date.now().toString()
   }
 
   async uploadAvatar(){
@@ -63,10 +61,10 @@ export class EditProfilePage implements OnInit {
     const file = await fetch(photo.dataUrl)
       .then((res) => res.blob())
       .then((blob) => new File([blob], 'my-file', { type: `image/JPEG` }))
-
-    const fileName = this.apiService.profile.id
+    const fileName = this.apiService.profile.id 
 
     await loader.present()
+
     let uplodedphoto = await this.apiService.uploadAvatar(fileName, file)
     console.log(uplodedphoto)
 
@@ -80,7 +78,6 @@ export class EditProfilePage implements OnInit {
   }
 }
 updateProfile(){
-  let gender2 
   
   let data = {
     full_name: this.name,

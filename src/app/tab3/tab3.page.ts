@@ -38,7 +38,7 @@ export class Tab3Page implements OnInit {
     private apiService: ApiService,
     private navCtrl: NavController
   ) {
-    this.updateFeeds()
+    //this.updateFeeds()
     this.profile =  this.apiService.profile;
     
   }
@@ -67,9 +67,11 @@ export class Tab3Page implements OnInit {
 
   async ngOnInit() {
 
-    this.allPosts = await this.apiService.getPost(this.profile.id);
 
     this.profile = await this.apiService.profile;
+
+    this.allPosts = await  this.apiService.getPosts(this.profile.id);
+
   }
   getReactionIcon(reaction: string): string {
     return Reactions[reaction];

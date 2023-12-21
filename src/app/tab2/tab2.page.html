@@ -21,7 +21,7 @@
           <ion-label class="bold">My Friends</ion-label>
         </ion-segment-button>
         <ion-segment-button value="FriendsRequest">
-          <ion-label class="bold">Friendship request</ion-label>
+          <ion-label class="bold">Friendship Request</ion-label>
         </ion-segment-button>
       </ion-segment>
     </ion-toolbar>
@@ -44,7 +44,7 @@
 
 
 
-  <div *ngIf="activeTab==='friendList'">
+
     <div *ngIf="activeTab==='friendList'">
       <ion-item *ngFor="let friend of friendList" lines="none" class="ion-margin-bottom">
         <ion-avatar routerLink="/friend-profile" slot="start">
@@ -57,11 +57,11 @@
         <ion-button *ngIf="friend['friendShipStatues'] === 0 && !profile.friends.includes( friend.id)" color="danger" (click)="addFriend(friend['id'])"  shape="round" slot="end">Add</ion-button>
         <ion-button *ngIf="friend['friendShipStatues'] === 1" color="danger"  shape="round" slot="end">Added</ion-button>
         <ion-button *ngIf="friend['friendShipStatues'] === 2" color="danger" (click)="acceptFriend(friend['friendshipId'],'','')"  shape="round" slot="end">Accept</ion-button>
-        <ion-button *ngIf="profile.friends.includes( friend.id)" color="danger"  shape="round" slot="end">Visit</ion-button>
+        <ion-button *ngIf="profile.friends.includes( friend.id)" color="danger"  shape="round" (click)="visitFriend(friend.id)" slot="end">Visit</ion-button>
 
       </ion-item>
       </div>
 
-  </div>
+
 
 </ion-content>

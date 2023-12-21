@@ -74,7 +74,7 @@ export class FriendProfilePage implements OnInit {
  
     })
     console.log(this.friendProfile)
-    this.allPosts = await this.ApiService.getPost(this.friendProfile.id) || []
+    this.allPosts = await this.ApiService.getPosts(this.friendProfile.id) || []
     this.postCount = this.allPosts.length
     console.log("count",this.allPosts.length)
 
