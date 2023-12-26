@@ -10,8 +10,9 @@ import { ApiService } from '../services/api.service';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page implements OnInit {
-
+  
   isOpen = false;
+  postCount
   allPosts: any;
   profile: any;
   friendsCount = this.apiService.profile.friends.length -1 | 0
@@ -71,6 +72,7 @@ export class Tab3Page implements OnInit {
     this.profile = await this.apiService.profile;
 
     this.allPosts = await  this.apiService.getPosts(this.profile.id);
+    this.postCount = this.allPosts.length | 0
 
   }
   getReactionIcon(reaction: string): string {
@@ -99,4 +101,12 @@ export class Tab3Page implements OnInit {
   updateFeeds(){
     this.apiService.getFeed().then(data=> this.allPosts = data)
   }
+
+  handleRefresh(event) {
+    setTimeout(() => {
+      this.ngOnInit()
+      event.target.complete();
+    }, 1000);
+  }
+  
 }

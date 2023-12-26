@@ -7,7 +7,12 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
+  <ion-refresher class="ion-padding"  slot="fixed" 
+  style="background-color: #F1F1F1; height: 300px; "
+   [pullFactor]="0.5" [pullMin]="100" [pullMax]="200" 
+   (ionRefresh)="handleRefresh($event)">
+  </ion-refresher>
+  
   <ion-item lines="none" class="searchBar ion-margin-bottom">
     <ion-icon name="search-outline" color="danger" slot="start"></ion-icon>
     <ion-input type="text" [(ngModel)]="searchinput" (ngModelChange)="searchOnChange($event)" placeholder="Search friends"></ion-input>

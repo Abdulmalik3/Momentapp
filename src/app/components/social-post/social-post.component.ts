@@ -235,6 +235,11 @@ export class SocialPostComponent implements OnInit {
 
   }
 
+  async deletPost(id){
+    await this.apiService.deletePost(id)
+
+  }
+
 
 
 }

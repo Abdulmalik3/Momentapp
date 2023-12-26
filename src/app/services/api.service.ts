@@ -338,7 +338,17 @@ async loadUser() {
   
 
   }
-  
+
+  async deletePost(id){
+
+    try {
+      let data = await this.supabase.from('posts').delete().eq('id', id)
+      console.log(data)
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   async reactToPost(postId, reaction, typeId){
     const user = this.profile;

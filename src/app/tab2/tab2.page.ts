@@ -121,4 +121,11 @@ async acceptFriend(id,senderId,recieverdId){
     this.navCtrl.navigateForward('/friend-profile')
 
   }
+  
+  handleRefresh(event) {
+    setTimeout(() => {
+      this.ngOnInit()
+      event.target.complete();
+    }, 1000);
+  }
 }

@@ -22,9 +22,10 @@ export class PostPage implements OnInit {
    }
 
    async savePost(){
+    if(this.postPhoto){
     await this.uploadPostImage()
       console.log(this.caption)
-
+    }
       var data = {
         caption: this.caption,
         authorId: this.profile.id,

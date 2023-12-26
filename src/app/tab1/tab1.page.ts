@@ -75,7 +75,7 @@ export class Tab1Page {
     setTimeout(() => {
       this.ngOnInit()
       event.target.complete();
-    }, 2000);
+    }, 1000);
   }
 
 
@@ -153,13 +153,20 @@ export class Tab1Page {
               .single()
               this.allPosts[index]['comments'] = firstComment.data
           }
+        
           console.log("updated post from database :", newdata, this.allPosts)
 
       
           // You can also trigger any UI updates or other logic here
         }
       }
+      if (payload.eventType === "DELETE") {
+        console.log("Post deleted ", payload)
+        const index = this.allPosts.findIndex(post => post.id === payload.old['id']);
+        this.allPosts.splice(index,1)
+
     }
+  }
   ).subscribe(res=>{
     console.log(res)
   })
