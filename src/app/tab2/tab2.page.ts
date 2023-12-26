@@ -27,7 +27,8 @@ export class Tab2Page {
    }
 
    async ngOnInit() {
-
+    this.apiService.getUserProfile()
+    this.profile = this.apiService.profile
     this.friendList = await this.apiService.getFriends(this.profile.friends)
     const index = this.friendList.findIndex(friend => friend.id === this.apiService.profile.id);
         
@@ -56,6 +57,7 @@ async acceptFriend(id,senderId,recieverdId){
   const data = await this.apiService.acceptFriendship(id)
   const index = this.friendshipRequest.findIndex(item => item.id === id);
   this.apiService.getUserProfile()
+  this.friendList = this.profile.friends 
   await localStorage.setItem('newFriend','true')
   this.ngOnInit()
         
@@ -87,7 +89,7 @@ async acceptFriend(id,senderId,recieverdId){
             console.log('this is me!!')
 
           }else{
-        let ff = await this.apiService.checkFriendshipRequests(this.apiService.profile.id, friend['id'])
+        let ff = this.friendshipRequest
         if(ff[0] === 1){
           friend['friendShipStatues'] = 1
         }else if( ff[0] === 2){
@@ -110,6 +112,8 @@ async acceptFriend(id,senderId,recieverdId){
   
   async acceptFriendship(id){
     await this.apiService.acceptFriendship(id)
+    this.apiService.getUserProfile()
+    this.profile = this.apiService.profile
   }
 
   async visitFriend(friendID){
@@ -127,5 +131,18 @@ async acceptFriend(id,senderId,recieverdId){
       this.ngOnInit()
       event.target.complete();
     }, 1000);
+
   }
+
+  async deleteFriend(id){
+    let delStat = await this.apiService.deleteFriend(id)
+    if(delStat){
+      let index = this.friendList.findIndex((friend) => friend === id)
+      this.friendList.splice(index, 1)
+      this.apiService.getUserProfile()
+      this.profile = this.apiService.profile
+    }
+
+  }
+
 }

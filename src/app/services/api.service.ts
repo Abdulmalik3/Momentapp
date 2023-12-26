@@ -504,6 +504,54 @@ async loadUser() {
     this.getUserProfile()
   }
   
+  async deleteFriend(friendId){
+    let myFrinds
+    let myFriendFrinds
+
+    try {
+      let index = this.profile.friends.findIndex((friend) => friend === friendId)
+      let updateMyFriendsList = this.profile.friends
+      updateMyFriendsList.splice(index,1)
+      myFrinds = updateMyFriendsList
+      console.log("my id:" ,this.profile.id)
+      console.log("my friends id:" ,friendId)
+
+      console.log("updated array: " ,updateMyFriendsList)
+    } catch (error) {
+      console.log("delete friend", error);
+    }
+
+    try {
+    let data = await this.supabase.from('profiles').select('friends').eq('id',friendId).single()
+    let updateMyFriendFrinds = data.data.friends
+    let index2 = updateMyFriendFrinds.findIndex(friend => friend === this.profile.id)
+    console.log(updateMyFriendFrinds)
+    updateMyFriendFrinds.splice(index2,1)
+    myFriendFrinds = updateMyFriendFrinds
+    console.log(updateMyFriendFrinds)
+    } catch (error) {
+      console.log("delete friend", error);
+    }
+    try {
+      //my friends
+      const { data, error }  = await this.supabase.from('profiles')
+        .update({ friends: myFrinds })
+        .eq('id', this.profile.id)
+        .select();
+        const { data: data2, error: error2 }  = await this.supabase.from('profiles')
+        .update({ friends: myFriendFrinds })
+        .eq('id', friendId)
+        .select();
+
+    } catch (error) {
+      console.log(error)
+      
+    }
+    return true
+  }
+
+    
+  
 
 async bringMemebers(){
 let { data: profiles, error } = await this.supabase
