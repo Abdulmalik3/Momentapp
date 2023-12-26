@@ -188,7 +188,7 @@ ion-grid {
 .reactionPopupModal {
     position: fixed;
     top: 55px;
-    width: 320px;
+    width: auto;
     height: 100%;
     z-index: 999999;
     right: 0px;
@@ -211,10 +211,15 @@ ion-grid {
 
 .peopleReactions {
     border-radius: 10px;
-    --inner-padding-end: 0;
+
     img {
         height: 25px !important;
         object-fit: contain !important;
+    }
+    
+    ion-icon {
+        height: 25px !important;
+        
     }
 }
 .modal-hight {

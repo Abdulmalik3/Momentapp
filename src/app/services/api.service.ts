@@ -25,7 +25,7 @@ export class ApiService {
       environment.supabase.url,
       environment.supabase.key
       )
-    
+      this.loadUser()
       this.supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           this.currentUser.next(session.user)
@@ -338,6 +338,7 @@ async loadUser() {
   
 
   }
+  
 
   async reactToPost(postId, reaction, typeId){
     const user = this.profile;

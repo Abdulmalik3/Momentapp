@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { DataHelperService } from 'src/app/shared/data-helper.service';
-import { iPost } from 'src/app/shared/models';
 @Component({
   selector: 'app-friend-profile',
   templateUrl: './friend-profile.page.html',

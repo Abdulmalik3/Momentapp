@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {  CanActivate, Router, UrlTree } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, map,filter, take } from 'rxjs';
 import { ApiService } from '../services/api.service';
 
 @Injectable({
@@ -13,14 +13,19 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(): Observable<boolean | UrlTree>  {
+    console.log("auth guard canactivate",this.apiService.currentUser )
+    
     return  this.apiService.currentUser.pipe(
-
+      filter((val)=> val !== null),
+      take(1),
       map((isAuthenticated) => {
         console.log("isAuthenticated:", isAuthenticated)
-        if (!isAuthenticated) {
-          return this.router.parseUrl('/login');
+        if (isAuthenticated) {
+          return true
+        }else{
+          this.router.createUrlTree(['/login'])
         }
-        return true
+
       }))
         
   }

@@ -6,6 +6,7 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'chat',
@@ -26,7 +27,6 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./credentials/login/login.module').then(m => m.LoginPageModule),
-
   },
   {
     path: 'splash-screen',
