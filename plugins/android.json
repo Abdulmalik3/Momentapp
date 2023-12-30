@@ -1,0 +1,27 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "disit.dev.socialapp"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "disit.dev.socialapp"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "disit.dev.socialapp"
+    },
+    "cordova-plugin-ionic-webview": {
+      "PACKAGE_NAME": "disit.dev.socialapp"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "disit.dev.socialapp"
+    }
+  },
+  "dependent_plugins": {}
+}

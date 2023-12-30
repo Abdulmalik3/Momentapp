@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { PhotoViewer } from '@awesome-cordova-plugins/photo-viewer/ngx';
 import { ApiService } from '../services/api.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -27,7 +26,6 @@ export class Tab1Page {
 
 
   constructor(
-    public photo: PhotoViewer,
     private apiService: ApiService,
     private router: Router,
      private  modalCtrl: ModalController

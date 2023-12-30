@@ -25,7 +25,6 @@ export class ApiService {
       environment.supabase.url,
       environment.supabase.key
       )
-      this.loadUser()
       this.supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           this.currentUser.next(session.user)
@@ -118,7 +117,7 @@ async loadUser() {
       console.log(error)
       return error
     }
-    this.router.navigateByUrl('/') 
+    this.router.navigateByUrl('/tabs/tab1') 
     return data.user
   }
 
@@ -304,11 +303,6 @@ async loadUser() {
     } else if (initialData) {
       data.push(initialData);
     }
-
- 
-    
-
-
     console.log(data);
   
     return data;

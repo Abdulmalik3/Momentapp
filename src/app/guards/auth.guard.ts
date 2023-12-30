@@ -17,13 +17,13 @@ export class AuthGuard implements CanActivate {
     
     return  this.apiService.currentUser.pipe(
       filter((val)=> val !== null),
-      take(1),
+
       map((isAuthenticated) => {
         console.log("isAuthenticated:", isAuthenticated)
         if (isAuthenticated) {
           return true
         }else{
-          this.router.createUrlTree(['/login'])
+          this.router.navigateByUrl('/login')
         }
 
       }))
