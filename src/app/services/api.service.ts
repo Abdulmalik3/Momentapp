@@ -25,15 +25,17 @@ export class ApiService {
       environment.supabase.url,
       environment.supabase.key
       )
+      this.loadUser()
       this.supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+          console.log("user data from session",session)
           this.currentUser.next(session.user)
           console.log("Event:" ,event)
           console.log("SET USER:" ,session)
         }else{
-
+          if(!session){
           this.currentUser.next(false)
-        }})
+        }}})
         
         this.loadUser()
         this.checkNontifications()
@@ -42,9 +44,7 @@ export class ApiService {
 }
 
 async loadUser() {
-  if(this.currentUser.value){
-    return;
-  }
+
 
     const data = await this.supabase.auth.getUser();
     if(data.data.user){
@@ -117,6 +117,7 @@ async loadUser() {
       console.log(error)
       return error
     }
+    await this.router.navigateByUrl('') 
     this.router.navigateByUrl('/tabs/tab1') 
     return data.user
   }

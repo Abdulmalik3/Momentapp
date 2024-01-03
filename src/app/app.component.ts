@@ -10,6 +10,7 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 })
 export class AppComponent implements OnInit{
   constructor(private apiService: ApiService) {
+    apiService.loadUser()
   }
   async ngOnInit(){
     await this.apiService.getUserProfile()
@@ -18,4 +19,5 @@ export class AppComponent implements OnInit{
 
 
   }
+  
 }

@@ -2,8 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { IonModal, ModalController } from '@ionic/angular';
+import { IonModal, ModalController, isPlatform } from '@ionic/angular';
 import { PostPage } from '../pages/post/post.page';
+
 
 
 @Component({
@@ -34,6 +35,7 @@ export class Tab1Page {
     apiService.getUserProfile()
     this.profile = this.apiService.profile
     this.userId = this.profile.id
+
     
   }
 
@@ -195,4 +197,9 @@ export class Tab1Page {
   
 
 }
+
+
+
+
 }
+

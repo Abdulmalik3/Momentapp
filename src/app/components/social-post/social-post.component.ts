@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { IonModal, ModalController, NavController } from '@ionic/angular';
+import { IonModal, ModalController, NavController, isPlatform } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { DataHelperService, Reactions } from 'src/app/shared/data-helper.service';
 import { CommentsModalComponent } from '../comments-modal/comments-modal.component';
@@ -46,7 +46,6 @@ export class SocialPostComponent implements OnInit {
     private apiService: ApiService,
     private modalCtrl: ModalController
   ) { 
-    
 
     
   
@@ -240,8 +239,7 @@ export class SocialPostComponent implements OnInit {
 
   }
 
-
-
+  
 }
 
 
