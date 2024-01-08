@@ -19,14 +19,20 @@
     <ion-input type="text" placeholder="Search here...."></ion-input>
   </ion-item>
 
-  <ion-item *ngFor="let chat of chatList" routerLink="/chat-screen">
+  <ion-item *ngFor="let chat of chatList; index as i" (click)="navigateToChat(i,chat.user1.id,chat.user2.id)" >
     <ion-avatar slot="start">
-      <img src={{chat.userProfile}} alt="">
+      <img *ngIf="chat.user1.id !== profile.id" src={{chat.user1.avatar_url}} alt="">
+      <img *ngIf="chat.user2.id !== profile.id" src={{chat.user2.avatar_url}} alt="">
     </ion-avatar>
-    <ion-label>
-      <h3>{{chat.username}}</h3>
+    <ion-label *ngIf="chat.user1.id !== profile.id">
+      <h3>{{chat.user1.full_name}}</h3>
       <p>{{chat.lastMessage}}</p>
     </ion-label>
+    <ion-label *ngIf="chat.user2.id !== profile.id">
+      <h3>{{chat.user2.full_name}}</h3>
+      <p>{{chat.lastMessage}}</p>
+    </ion-label>
+    
     <div class="ion-text-end">
       <p class="appTxt">{{chat.lastMsgTime}}</p>
     </div>

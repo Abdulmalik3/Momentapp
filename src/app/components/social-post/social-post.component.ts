@@ -4,6 +4,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { DataHelperService, Reactions } from 'src/app/shared/data-helper.service';
 import { CommentsModalComponent } from '../comments-modal/comments-modal.component';
 import { CommentPage } from 'src/app/pages/comment/comment.page';
+import { Router } from '@angular/router';
 
 
 
@@ -44,7 +45,8 @@ export class SocialPostComponent implements OnInit {
     public dataHelper: DataHelperService,
     public navCtrl: NavController,
     private apiService: ApiService,
-    private modalCtrl: ModalController
+    private router: Router,
+    private modalCtrl: ModalController,
   ) { 
 
     
@@ -239,6 +241,11 @@ export class SocialPostComponent implements OnInit {
 
   }
 
+  async startConversation(id,friendData){
+    await localStorage.setItem('myFriend', JSON.stringify(friendData))
+    await this.modalCtrl.dismiss()
+    await this.router.navigateByUrl("/chat-screen?friendId="+id)
+  }
   
 }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { SupabaseClient, createClient, User } from '@supabase/supabase-js';
-import { BehaviorSubject, Observable, findIndex } from 'rxjs';
+import { BehaviorSubject, Observable, findIndex, observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
@@ -39,6 +39,8 @@ export class ApiService {
         
         this.loadUser()
         this.checkNontifications()
+        
+        if(this.profile){this.getUserConversations(this.profile.id)}
 
 
 }
@@ -117,6 +119,7 @@ async loadUser() {
       console.log(error)
       return error
     }
+    await this.getUserProfile()
     await this.router.navigateByUrl('') 
     this.router.navigateByUrl('/tabs/tab1') 
     return data.user
@@ -231,7 +234,7 @@ async loadUser() {
       .single()
   
    
-    console.log("friends profile:", data.data)
+    console.log("friends profile:", data)
     return data.data
 
 
@@ -737,4 +740,59 @@ async bringFriendshipRequests(){
     return result;
 }
 
+
+
+//----- Chat
+
+conversations 
+chatConnection
+async getUserConversations(userId: string) {
+  let { data, error } = await this.supabase
+    .from('conversations')
+    .select(`*,
+    user1:participant_creator(*),
+    user2:participant_other(*),
+    messages: messages(*)
+  `)
+  .or(`participant_other.eq.${this.profile.id}, participant_creator.eq.${this.profile.id}`)
+    
+
+      if (error) {
+        console.error('Error fetching user conversations:', error);
+      }
+
+
+
+      console.log('Conversations: ', data)
+      this.conversations = data
+    }
+
+
+    async startNewConversation(friendId){
+      let {data, error} = await this.supabase
+      .from('conversations')
+      .insert([
+        { participant_other: friendId ,participant_creator: this.profile.id }
+      ])
+      .select()
+
+      if(error){
+        console.log("can't start a conversation",error)
+      }
+
+      return data
+    }
+
+    async sendNewMessage(message){
+        let {data,error} = await this.supabase.from('messages')
+        .insert(message)
+        .select()
+
+        if(error){
+          console.log("Cannot send a message ",error)
+        }
+        return data
+    }
 }
+
+

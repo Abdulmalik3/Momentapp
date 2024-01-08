@@ -103,14 +103,6 @@ export class Tab1Page {
   async connectTorealtime(){
 
     const user = await this.apiService.supabase.auth.getUser();
-  
-    // Bring friend's ids from the friends column in the profiles table
-    // const { data: profile, error: profilesError } = await this.apiService.supabase
-    //   .from('profiles')
-    //   .select('friends')
-    //   .eq('id', user.data.user.id)
-    //   .single();
-
     console.log("this.profile['friends']::: ", this.profile['friends'].toString())
     this.apiService.supabase.channel('schema-db-changes').on('postgres_changes',
     {
@@ -197,6 +189,7 @@ export class Tab1Page {
   
 
 }
+
 
 
 

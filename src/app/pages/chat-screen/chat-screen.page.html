@@ -3,36 +3,37 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Jos Buttler</ion-title>
+    <ion-title>{{friendData['full_name']}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding-top">
-
-  <div class="incomingMsg">
-    <p class="messageText rounded">Lorem ipsum is a dummy text.</p>
+<ion-content  #scrollElement class="ion-padding-top" [scrollEvents]="true">
+<div  *ngFor="let message of chat?.messages">
+  
+  <div *ngIf="message.sender_id !== profile.id" class="incomingMsg">
+    <p class="messageText rounded">{{message.content}}</p>
     <p class="appTxt messageTime">
-      <small>10 Oct 2022 - 09:58 AM</small>
+      <small>{{message.timestamp}}</small>
     </p>
   </div>
 
-  <div class="outgoingMsg">
+  <div *ngIf="message.sender_id === profile.id" class="outgoingMsg">
     <div class="ion-text-right">
-      <p class="messageText rounded"> Lorem ipsum dolor sit amet consectetur.</p>
+      <p class="messageText rounded"> {{message.content}}</p>
     </div>
     <p class="appTxt messageTime ion-text-right">
-      <small>10 Oct 2022 - 10:00 AM</small>
+      <small>{{message.timestamp}}</small>
     </p>
   </div>
-
+</div>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar color="light">
-    <ion-input placeholder="Enter message here....">
+    <ion-input [(ngModel)]="content" placeholder="Enter message here....">
     </ion-input>
     <ion-buttons slot="end">
-      <ion-fab-button size="small" color="danger">
+      <ion-fab-button (click)="sendMessage()" size="small" color="danger">
         <ion-icon name="send" color="light"></ion-icon>
       </ion-fab-button>
     </ion-buttons>
