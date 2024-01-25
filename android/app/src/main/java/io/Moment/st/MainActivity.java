@@ -16,12 +16,13 @@ public class MainActivity extends BridgeActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Appodeal.initialize(this, "9ccfce4351a2848a44c67a3d233e498a362ed49600aa1d00", Appodeal.BANNER, new ApdInitializationCallback() {
+        Appodeal.initialize(this, "c67db1393858aa8d788656286272ea6adc08514708423076", Appodeal.BANNER, new ApdInitializationCallback() {
             @Override
             public void onInitializationFinished(@Nullable List<ApdInitializationError> errors) {
                 // Appodeal initialization finished
             }
         });
+
         Appodeal.show(this, Appodeal.BANNER_TOP);
 
     }
