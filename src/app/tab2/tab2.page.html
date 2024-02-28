@@ -65,6 +65,7 @@
         <ion-button *ngIf="friend['friendShipStatues'] === 1" color="danger"  shape="round" slot="end">Added</ion-button>
         <ion-button *ngIf="friend['friendShipStatues'] === 2" color="danger" (click)="acceptFriend(friend['friendshipId'],'','')"  shape="round" slot="end">Accept</ion-button>
         <ion-button *ngIf="profile.friends.includes( friend.id)" color="danger"  shape="round" (click)="visitFriend(friend.id)" slot="end">Visit</ion-button>
+        <ion-button color="danger" (click)="addFriend(friend['id'])"  shape="round" slot="end">Animate</ion-button>
       </ion-item>
         <ion-item-options class="ion-padding" style="height: 70%; top:10%; " >
 

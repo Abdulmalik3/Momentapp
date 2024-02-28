@@ -19,11 +19,13 @@ export class SocialPostComponent implements OnInit {
   @ViewChild('popover') popover: any;
   @ViewChild('popover2') popover2: any;
   @ViewChild(IonModal) modal: IonModal;
+  
 
 
   profile: any;
  @Input() posts
  @Input() myId
+ @Input() scrollTo
  isOpen = false
  showUserProfile
  FriendData

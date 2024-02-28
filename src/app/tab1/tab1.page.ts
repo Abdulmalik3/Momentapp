@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { IonModal, ModalController, isPlatform } from '@ionic/angular';
+import { IonContent, IonModal, ModalController, isPlatform } from '@ionic/angular';
 import { PostPage } from '../pages/post/post.page';
 
 
@@ -16,6 +16,8 @@ export class Tab1Page {
 
   @ViewChild('popover') popover: any;
   @ViewChild(IonModal) modal: IonModal;
+  @ViewChild(IonContent) content: IonContent;
+
 
 
   showNightPost: boolean;
@@ -25,6 +27,7 @@ export class Tab1Page {
   userId
   newNotification = 'false'
   range = 11
+  scrollTo 
 
 
   constructor(
@@ -45,7 +48,6 @@ export class Tab1Page {
     this.profile = this.apiService.profile
     this.updateFeeds()
     this.connectTorealtime()
-
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
@@ -53,8 +55,6 @@ export class Tab1Page {
       console.log("router:",event.urlAfterRedirects)
       if (event.urlAfterRedirects === '/tabs/tab1') {
         // Call your function here
-        this.apiService.checkNontifications()
-        this.newNotification = localStorage.getItem('newNotifications')
         let isThereNewFriend = localStorage.getItem('newFriend')
         if(isThereNewFriend === 'true'){
           this.updateFeeds()
@@ -63,13 +63,15 @@ export class Tab1Page {
           localStorage.setItem('newFriend','false')
 
         }
-      }else{
+      }})
+      setInterval(() => {
+        this.checkForNewPost();
         this.apiService.checkNontifications()
-      }
-    });
+        this.newNotification = localStorage.getItem('newNotifications')
 
-
-   }
+      }, 10000)
+    
+    }
    
    handleRefresh(event) {
     setTimeout(() => {
@@ -77,6 +79,23 @@ export class Tab1Page {
       event.target.complete();
     }, 1000);
   }
+
+  async checkForNewPost() {
+    let lastPost = this.allPosts[0];
+    let newPost = await this.apiService.supabase
+      .from("posts")
+      .select("*, profiles(id,full_name, avatar_url),comments:first_comment(*)")
+      .gt("id", lastPost.id)
+
+
+    if (newPost.data != null) {
+      this.allPosts.unshift(...newPost.data)
+    }
+    console.log("new posts updated", newPost);
+  }
+
+  // Repeat the checkForNewPost function every 5 seconds
+
 
 
   async saveSleepPost(){
@@ -116,18 +135,32 @@ export class Tab1Page {
     
       console.log("Payload in realtime",payload )
       const newdata  = payload.new
-      if(payload.eventType == "INSERT"){
+      // if(payload.eventType == "INSERT"){
+      
+      //   let scrollPosition;
+      //   this.content.getScrollElement().then(scrollElement => {
+      //     scrollPosition = scrollElement.scrollTop;
+      //   });
 
-       let newpost = await this.apiService.supabase.from("posts")
-       .select("*, profiles(id,full_name, avatar_url),comments:first_comment(*)")
-       .eq("id",newdata['id'])
-       .single()
+      //   // Save old max scroll height
+      //   let oldScrollHeight = (await this.content.getScrollElement()).scrollHeight
+      //   console.log("oldScrollHeight",oldScrollHeight)
+      //  let newpost = await this.apiService.supabase.from("posts")
+      //  .select("*, profiles(id,full_name, avatar_url),comments:first_comment(*)")
+      //  .eq("id",newdata['id'])
+      //  .single()
+        
+      //  console.log("new post from database :", newpost.data)
+      //  this.allPosts.unshift(newpost.data)
 
-       console.log("new post from database :", newpost.data)
-       this.allPosts.unshift(newpost.data)
-       console.log("new allPost:", this.allPosts)
+      //  let newScrollHeight = (await this.content.getScrollElement()).scrollHeight
+      //  console.log("oldScrollHeight",newScrollHeight)
+      //  console.log("new allPost:", this.allPosts)
+      //   // Set new scroll position
+      //   this.scrollTo = (newScrollHeight - oldScrollHeight) + scrollPosition;
 
-      }
+
+      // }
       if (payload.eventType === "UPDATE") {
         const updatedPostId = payload.new['id'];
       
