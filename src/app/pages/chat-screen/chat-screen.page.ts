@@ -14,7 +14,7 @@ export class ChatScreenPage implements OnInit {
   friendId
   content
   convId: any;
-  friendData
+  friendData = JSON.parse(localStorage.getItem('myFriend'))
 
   @ViewChild(IonContent, { static: false }) contentt: IonContent;
 
@@ -34,7 +34,7 @@ export class ChatScreenPage implements OnInit {
   }
 
   async ngOnInit(){
-    this.friendData = await localStorage.getItem('myFriend')
+ 
 
   }
   

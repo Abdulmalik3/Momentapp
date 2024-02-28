@@ -24,6 +24,7 @@ export class Tab1Page {
   allPosts
   userId
   newNotification = 'false'
+  range = 11
 
 
   constructor(
@@ -41,7 +42,6 @@ export class Tab1Page {
 
   async ngOnInit() {
     this.newNotification = await localStorage.getItem('newNotifications')
-    this.apiService.getUserProfile()
     this.profile = this.apiService.profile
     this.updateFeeds()
     this.connectTorealtime()
@@ -187,6 +187,20 @@ export class Tab1Page {
     });
     modal.present()
   
+
+}
+
+async loadData($event){
+  let olderPosts = await this.apiService.getFeed(this.range)
+
+  console.log("olderPosts",olderPosts)
+  
+  this.allPosts = this.allPosts.concat(olderPosts)
+  console.log("allPosts",this.allPosts)
+  setTimeout(() => {
+    this.range += 10
+    $event.target.complete();
+  }, 1000);
 
 }
 

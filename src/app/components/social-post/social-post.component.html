@@ -143,13 +143,17 @@
 <ion-modal [isOpen]="isOpen"  (willDismiss)="isOpentoFalse($event)" >
   <ng-template>
     <ion-content>
+      <div class="back" style="    background-image: url('https://media.istockphoto.com/id/1367290423/sv/foto/camping-under-the-stars.jpg?b=1&s=170667a&w=0&k=20&c=yGxZQuUTQ5evSYCdQAoerthGdCkNjs_1maQYbMdIi58=');
+      background-size: 130%;
+      background-repeat: no-repeat;
+      background-position: center;">
       <div class="userContainer">
       <div class="userInfo">
         <ion-avatar  class="userAvatar2" >
         <img  src="{{FriendData['avatar_url']}}">
         </ion-avatar>
           <ion-label>
-            <p class="bold" style="font-size: x-large; color: black;">{{FriendData['full_name']}}</p>
+            <p class="bold" style="font-size: x-large; color: white;">{{FriendData['full_name']}}</p>
             <p *ngIf="FriendData['bio']">{{FriendData['bio']}}</p>
           </ion-label>
           <ion-button *ngIf="!profile.friends.includes(FriendData['id'])" color="danger"  style=" font-size:large;" size="small">
@@ -164,6 +168,7 @@
             chat 
           </ion-button>
         </div> 
+      </div>
       </div>
     </ion-content>
   </ng-template>

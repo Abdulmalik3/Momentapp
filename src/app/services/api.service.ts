@@ -92,12 +92,12 @@ async loadUser() {
     .update([
       { full_name: name ,
        avatar_url: 'https://qupalcyhiytufftknrzr.supabase.co/storage/v1/object/public/avatars/'+ new_id ,
-       friends: [new_id] },
+       friends: [] },
     ])
     .eq("id", new_id )
     .select()
     console.log("sing up data:", data2)
-
+    await this.getUserProfile()
     this.router.navigateByUrl('/') 
 
     
@@ -216,10 +216,10 @@ async loadUser() {
       .eq('id', id)
       .single()
       
-   
+    data.data['friends'].push(id)
     console.log("profile432:", data)
     await localStorage.setItem('profile',JSON.stringify( data.data))
-    this.profile = JSON.parse(localStorage.getItem('profile'))
+    this.profile = data.data
 
 
 
@@ -268,13 +268,13 @@ async loadUser() {
 
   //get user's posts and friends posts and listen for changes
 
-  async getFeed(id = 1) {
+  async getFeed(range: number = 0) {
     let friends
     if(this.profile){
       friends = this.profile.friends
     }else{
   
-    // Bring friend's ids from the friends column in the profiles table
+    // Bring friend's ids from the friends column in the profiles table if there is no profile
     const { data: profile, error: profilesError } = await this.supabase
       .from('profiles')
       .select('friends')
@@ -294,6 +294,7 @@ async loadUser() {
       .from('posts')
       .select('*, profiles(id,full_name, avatar_url),comments:first_comment(*,profiles:userId (*))')
       .in('authorId', friends)
+      .range(range, range + 10)
       .order('created_at', { ascending: false })
 
   

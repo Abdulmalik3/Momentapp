@@ -23,7 +23,12 @@
 
 
   <app-social-post [posts]="allPosts" [myId]="userId"></app-social-post>
-
+  
+  <!-- infinite scroll -->
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="danger">
